@@ -66,7 +66,7 @@ argument-hint: [티켓ID 또는 생략(자동감지)]
 
 ## Phase 4 — 스모크 테스트 실행
 
-1. `urltest.http` 탐색 (testjob/ → ../testjob/ → ~/workspace/testjob/)
+1. `urltest.http` 탐색 (~/.claude-dotfiles/ → testjob/ → ../testjob/ → ~/workspace/testjob/)
 2. host/token 읽기 + 토큰 유효성 확인
 3. 사용자에게 실행할 엔드포인트 목록 확인:
    - GET: 기본 자동 실행

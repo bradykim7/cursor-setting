@@ -73,13 +73,32 @@ ln -s "$DOTFILES_DIR/settings.json" "$CLAUDE_DIR/settings.json"
 echo "[✓] settings.json → $DOTFILES_DIR/settings.json"
 
 echo ""
+
+# Step 6: urltest.http 설정 안내
+if [ ! -f "$DOTFILES_DIR/urltest.http" ]; then
+    echo "[!] urltest.http가 없습니다. 템플릿에서 복사 후 토큰을 설정해주세요:"
+    echo "    cp $DOTFILES_DIR/urltest.http.example $DOTFILES_DIR/urltest.http"
+    echo "    vi $DOTFILES_DIR/urltest.http"
+    echo ""
+else
+    echo "[✓] urltest.http 존재 확인"
+fi
+
+echo ""
 echo "=== 설치 완료! ==="
 echo ""
 echo "Symlinks:"
 ls -la "$CLAUDE_DIR/commands" "$CLAUDE_DIR/agents" "$CLAUDE_DIR/settings.json"
 echo ""
 echo "사용 가능한 커맨드:"
+echo "  /workcheck          - 작업 중간 점검 (영향 분석 + 스모크 + master 비교)"
+echo "  /workfinish         - 작업 마무리 (커밋 + PR 설명)"
 echo "  /commit-mailplug    - 팀 컨벤션 커밋 메시지 추천"
-echo "  /commit-suggest     - 일반 커밋 메시지 추천"
 echo "  /pr-description     - PR 설명 자동 생성"
 echo "  /affected-endpoints - 영향받는 엔드포인트 추적"
+echo "  /smoke-test         - 스모크 테스트"
+echo "  /branch-diff        - 브랜치 간 응답 비교"
+echo "  /test-affected      - 영향 추적 + 자동 스모크"
+echo ""
+echo "토큰 설정: $DOTFILES_DIR/urltest.http"
+echo "워크플로우: $DOTFILES_DIR/WORKFLOW.md"
