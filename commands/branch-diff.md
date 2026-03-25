@@ -12,9 +12,10 @@ argument-hint: [티켓ID(WM-32517)]
 ## urltest.http 위치 탐색
 
 다음 순서로 찾는다:
-1. `testjob/urltest.http`
-2. `../testjob/urltest.http`
-3. `/Users/mskim/workspace/testjob/urltest.http`
+1. `~/.claude-dotfiles/urltest.http`
+2. `testjob/urltest.http`
+3. `../testjob/urltest.http`
+4. `/Users/mskim/workspace/testjob/urltest.http`
 
 ## URL 패턴
 
