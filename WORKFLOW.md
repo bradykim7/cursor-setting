@@ -2,6 +2,15 @@
 
 ## 전체 커맨드 목록
 
+### 메타 커맨드 (플로우 한번에 실행)
+
+| 커맨드 | 용도 | 입력 예시 |
+|--------|------|-----------|
+| **`/workcheck`** | 영향 분석 + 스모크 테스트 한번에 | `/workcheck` |
+| **`/workfinish`** | 커밋 추천 + PR 설명 한번에 | `/workfinish` |
+
+### 개별 커맨드
+
 | 커맨드 | 용도 | 입력 예시 |
 |--------|------|-----------|
 | `/affected-endpoints` | 영향 엔드포인트 추적 (읽기 전용) | `/affected-endpoints` |
@@ -14,7 +23,21 @@
 
 ---
 
-## 티켓 작업 워크플로우
+## 빠른 사용법 (메타 커맨드)
+
+```
+git checkout -b feature/WM-XXXXX
+# 코드 작업...
+
+/workcheck              ← 영향 분석 + 스모크 테스트
+/workfinish             ← 커밋 + PR 설명 생성
+```
+
+이것만으로 전체 플로우가 완료됩니다. 세부 제어가 필요하면 아래 개별 커맨드를 사용하세요.
+
+---
+
+## 상세 워크플로우 (개별 커맨드)
 
 ### 1단계: 브랜치 생성 & 코드 작업
 
@@ -78,10 +101,11 @@ master 대비 응답 차이가 있는지 확인:
 ```
 
 수행 내용:
-1. Run1 — 현재 브랜치에서 모든 GET 엔드포인트 호출
-2. 서버 브랜치 전환 대기
-3. Run2 — master에서 동일 엔드포인트 호출
-4. JSON diff 비교 → `DIFF_REPORT.md` 생성
+1. Feature — `{host}/api/v2/mail/{path}` 호출
+2. Master — `{host}/master/api/v2/mail/{path}` 호출 (**서버 전환 불필요**)
+3. JSON diff 비교 → `DIFF_REPORT.md` 생성
+
+> `/workcheck`에도 master 비교가 포함되어 있으므로, workcheck만 실행해도 됩니다.
 
 ### 6단계: 커밋
 
