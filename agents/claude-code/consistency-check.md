@@ -1,7 +1,7 @@
 ---
 name: consistency-check
 description: Use this agent when you need to compare two data snapshots and identify inconsistencies between them. Detects missing records, field-level mismatches, and classifies issues by severity. Examples: "Compare these two datasets", "Find inconsistencies between DB and cache", "Check if source A and source B are in sync"
-model: sonnet
+model: haiku
 color: yellow
 ---
 

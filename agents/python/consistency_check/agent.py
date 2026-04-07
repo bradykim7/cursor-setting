@@ -25,7 +25,7 @@ from consistency_check.prompt import CONSISTENCY_CHECK_PROMPT, CONSISTENCY_CHECK
 # 설정
 # ---------------------------------------------------------------------------
 
-MODEL = "claude-sonnet-4-5"
+MODEL = "claude-haiku-4-5-20251001"
 MAX_TOKENS = 4096
 
 SYSTEM_PROMPT = GLOBAL_AGENT_POLICY + "\n\n" + CONSISTENCY_CHECK_PROMPT

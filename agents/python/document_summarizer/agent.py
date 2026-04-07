@@ -26,7 +26,7 @@ from document_summarizer.prompt import DOCUMENT_SUMMARIZER_PROMPT, DOCUMENT_SUMM
 # 설정
 # ---------------------------------------------------------------------------
 
-MODEL = "claude-sonnet-4-5"
+MODEL = "claude-haiku-4-5-20251001"
 MAX_TOKENS = 4096
 
 # ---------------------------------------------------------------------------
