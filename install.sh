@@ -50,7 +50,7 @@ fi
 ln -s "$DOTFILES_DIR/commands" "$CLAUDE_DIR/commands"
 echo "[✓] commands/ → $DOTFILES_DIR/commands"
 
-# Step 4: Backup & Symlink - agents/
+# Step 4: Backup & Symlink - agents/claude-code/ → ~/.claude/agents/
 echo "[*] agents/ 설정 중..."
 if [ -d "$CLAUDE_DIR/agents" ] && [ ! -L "$CLAUDE_DIR/agents" ]; then
     echo "    기존 agents/ 백업 → agents.bak/"
@@ -58,8 +58,8 @@ if [ -d "$CLAUDE_DIR/agents" ] && [ ! -L "$CLAUDE_DIR/agents" ]; then
 elif [ -L "$CLAUDE_DIR/agents" ]; then
     rm "$CLAUDE_DIR/agents"
 fi
-ln -s "$DOTFILES_DIR/agents" "$CLAUDE_DIR/agents"
-echo "[✓] agents/ → $DOTFILES_DIR/agents"
+ln -s "$DOTFILES_DIR/agents/claude-code" "$CLAUDE_DIR/agents"
+echo "[✓] agents/ → $DOTFILES_DIR/agents/claude-code"
 
 # Step 5: Backup & Symlink - settings.json
 echo "[*] settings.json 설정 중..."
