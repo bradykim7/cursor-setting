@@ -25,7 +25,7 @@ from architecture_review.prompt import ARCHITECTURE_REVIEW_PROMPT, ARCHITECTURE_
 # 설정
 # ---------------------------------------------------------------------------
 
-MODEL = "claude-sonnet-4-5"
+MODEL = "claude-opus-4-6"
 MAX_TOKENS = 4096
 
 SYSTEM_PROMPT = GLOBAL_AGENT_POLICY + "\n\n" + ARCHITECTURE_REVIEW_PROMPT

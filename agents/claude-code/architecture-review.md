@@ -1,7 +1,7 @@
 ---
 name: architecture-review
 description: Use this agent when you need to review an architecture proposal and identify operational tradeoffs and design risks. Evaluates scalability, resilience, observability, security boundaries, and failure isolation without making vague judgments. Examples: "Review this architecture doc", "What are the risks in this design?", "Analyze tradeoffs for this system proposal"
-model: sonnet
+model: opus
 color: blue
 ---
 

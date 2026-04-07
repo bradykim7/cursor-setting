@@ -1,7 +1,7 @@
 ---
 name: pr-description-generator
 description: Use this agent when you need to create comprehensive pull request descriptions based on git changes, commit history, and linked Jira tickets. Examples: <example>Context: User has completed a feature branch and needs to create a PR description before merging. user: 'I've finished implementing the user authentication feature. Can you help me create a PR description?' assistant: 'I'll use the pr-description-generator agent to analyze your git changes, commit history, and any linked Jira tickets to create a comprehensive PR description.' <commentary>Since the user needs a PR description generated from their code changes, use the pr-description-generator agent to analyze the git history and create a structured description.</commentary></example> <example>Context: User is about to submit a PR and wants to ensure all changes are properly documented. user: 'git log --oneline -10' shows recent commits, user: 'Please generate a PR description for my recent changes' assistant: 'I'll analyze your recent commits and generate a comprehensive PR description using the pr-description-generator agent.' <commentary>The user needs a PR description based on their git history, so use the pr-description-generator agent to create a structured description.</commentary></example>
-model: sonnet
+model: haiku
 color: purple
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: document-summarizer
 description: Use this agent when you need to summarize and normalize internal documents into a structured operational summary. Extracts decisions, risks, next actions, and open questions from meeting notes, design docs, incident notes, or reports. Examples: "Summarize this meeting note", "Extract action items from this doc", "Normalize this design doc"
-model: sonnet
+model: haiku
 color: green
 ---
 
