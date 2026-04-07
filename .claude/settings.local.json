@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/mskim/personal/cursor-setting log --oneline -5)",
+      "Bash(mkdir -p python claude-code)",
+      "Bash(mv architecture_review consistency_check document_summarizer endpoint_analysis pr_review_assistant shared python/)",
+      "Bash(mv pr-description-generator.md claude-code/)"
+    ]
+  }
+}
