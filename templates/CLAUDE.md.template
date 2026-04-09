@@ -1,0 +1,50 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code when working with this repository.
+
+## Project Overview
+
+- **Project**: {{PROJECT_NAME}}
+- **Type**: {{PROJECT_TYPE}}
+- **Language**: {{LANGUAGE}}
+- **Description**: {{DESCRIPTION}}
+
+## Directory Structure
+
+```
+{{DIRECTORY_STRUCTURE}}
+```
+
+## Development Commands
+
+### Build
+```bash
+{{BUILD_CMD}}
+```
+
+### Test
+```bash
+{{TEST_CMD}}
+```
+
+### Lint
+```bash
+{{LINT_CMD}}
+```
+
+### Run (Dev)
+```bash
+{{DEV_CMD}}
+```
+
+## Technical Guidelines
+
+### Code Style
+- {{STYLE_GUIDE}}
+
+### Conventions
+- {{CONVENTIONS}}
+
+## Important Notes
+
+- {{NOTES}}

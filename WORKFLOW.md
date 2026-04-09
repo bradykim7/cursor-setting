@@ -9,7 +9,22 @@
 | **`/workcheck`** | 영향 분석 + 스모크 테스트 한번에 | `/workcheck` |
 | **`/workfinish`** | 커밋 추천 + PR 설명 한번에 | `/workfinish` |
 
-### 개별 커맨드
+### 개발 커맨드 (NEW — humanlayer 영감)
+
+| 커맨드 | 용도 | 입력 예시 |
+|--------|------|-----------|
+| `/create-plan` | 구조적 구현 계획 수립 (조사→설계→계획서) | `/create-plan 검색 필터 추가` |
+| `/research` | 코드베이스 구조적 탐색 & 리서치 문서 | `/research 인증 플로우 분석` |
+| `/debug` | 구조적 디버깅 (병렬 조사) | `/debug 500 에러 발생` |
+
+### 세션 관리 커맨드 (NEW — humanlayer 영감)
+
+| 커맨드 | 용도 | 입력 예시 |
+|--------|------|-----------|
+| `/handoff` | 세션 인수인계 문서 작성 | `/handoff` |
+| `/resume-handoff` | 핸드오프에서 작업 재개 | `/resume-handoff .handoffs/2026-04-08_14-30-00_desc.md` |
+
+### 테스트 커맨드
 
 | 커맨드 | 용도 | 입력 예시 |
 |--------|------|-----------|
@@ -17,6 +32,11 @@
 | `/test-affected` | 영향 추적 + 자동 스모크 테스트 | `/test-affected WM-XXXXX` |
 | `/smoke-test` | 수동 스모크 테스트 | `/smoke-test GET /api/v2/mail/...` |
 | `/branch-diff` | 브랜치 간 응답 비교 | `/branch-diff WM-XXXXX` |
+
+### 커밋 & PR 커맨드
+
+| 커맨드 | 용도 | 입력 예시 |
+|--------|------|-----------|
 | `/commit-mailplug` | 팀 컨벤션 커밋 메시지 추천 | `/commit-mailplug` |
 | `/pr-description` | PR 설명 자동 생성 | `/pr-description` |
 | `/commit-suggest` | 일반 커밋 메시지 추천 | `/commit-suggest` |
@@ -37,7 +57,40 @@ git checkout -b feature/WM-XXXXX
 
 ---
 
-## 상세 워크플로우 (개별 커맨드)
+## 개발 워크플로우 (NEW)
+
+### 계획 → 구현 → 인수인계 흐름
+
+```
+/create-plan 기능 설명        ← 구조적 계획 수립
+# ... 구현 작업 ...
+/debug 에러 설명              ← 문제 발생 시 조사
+/handoff                      ← 세션 종료 시 인수인계
+/resume-handoff               ← 다음 세션에서 이어서
+```
+
+### 코드베이스 이해
+
+```
+/research 주제                ← 코드베이스 탐색 & 문서화
+```
+
+### 프로젝트 초기화
+
+```bash
+# 새 프로젝트에서 Claude Code 초기화
+./install.sh init /path/to/project
+
+# 생성되는 것:
+#   CLAUDE.md       ← 프로젝트별 AI 지침 (TODO 항목 편집)
+#   .handoffs/      ← 핸드오프 문서 저장소
+#   .plans/         ← 구현 계획서 저장소
+#   .research/      ← 리서치 문서 저장소
+```
+
+---
+
+## 상세 워크플로우 (기존 커맨드)
 
 ### 1단계: 브랜치 생성 & 코드 작업
 
@@ -207,11 +260,29 @@ TEST_ENDPOINTS.md에서 verify 컬럼으로 직접 지정 가능:
 ### dotfiles 구조
 
 ```
-~/.claude-dotfiles/          ← git repo
-├── commands/                ← 커스텀 커맨드 (7개)
+~/.claude-dotfiles/          ← git repo (cursor-setting)
+├── commands/                ← 커스텀 커맨드 (14개)
+│   ├── create-plan.md       ← NEW: 구조적 계획 수립
+│   ├── research.md          ← NEW: 코드베이스 리서치
+│   ├── debug.md             ← NEW: 구조적 디버깅
+│   ├── handoff.md           ← NEW: 세션 인수인계
+│   ├── resume-handoff.md    ← NEW: 핸드오프 재개
+│   ├── workcheck.md
+│   ├── workfinish.md
+│   ├── affected-endpoints.md
+│   ├── smoke-test.md
+│   ├── branch-diff.md
+│   ├── commit-mailplug.md
+│   ├── pr-description.md
+│   ├── commit-suggest.md
+│   └── test-affected.md
 ├── agents/                  ← 에이전트 설정
+├── templates/               ← NEW: 프로젝트 템플릿
+│   └── CLAUDE.md.template
+├── docs/                    ← NEW: 참고 문서
+│   └── approach-a-submodule.md
 ├── settings.json            ← 글로벌 설정
-├── install.sh               ← symlink 설치 스크립트
+├── install.sh               ← symlink 설치 + 프로젝트 init
 ├── WORKFLOW.md              ← 이 문서
 └── .gitignore
 ```
