@@ -9,15 +9,23 @@
 | **`/workcheck`** | 영향 분석 + 스모크 테스트 한번에 | `/workcheck` |
 | **`/workfinish`** | 커밋 추천 + PR 설명 한번에 | `/workfinish` |
 
-### 개발 커맨드 (NEW — humanlayer 영감)
+### 계획 라이프사이클 커맨드
 
 | 커맨드 | 용도 | 입력 예시 |
 |--------|------|-----------|
 | `/create-plan` | 구조적 구현 계획 수립 (조사→설계→계획서) | `/create-plan 검색 필터 추가` |
+| `/implement-plan` | 계획서 Phase별 구현 + 자동/수동 검증 | `/implement-plan .plans/2026-04-08-desc.md` |
+| `/iterate-plan` | 기존 계획서 피드백 반영 수정 | `/iterate-plan .plans/파일.md Phase 2 분리` |
+| `/validate-plan` | 구현 결과 전체 검증 + 리포트 | `/validate-plan` |
+
+### 리서치 & 디버깅 커맨드
+
+| 커맨드 | 용도 | 입력 예시 |
+|--------|------|-----------|
 | `/research` | 코드베이스 구조적 탐색 & 리서치 문서 | `/research 인증 플로우 분석` |
 | `/debug` | 구조적 디버깅 (병렬 조사) | `/debug 500 에러 발생` |
 
-### 세션 관리 커맨드 (NEW — humanlayer 영감)
+### 세션 관리 커맨드
 
 | 커맨드 | 용도 | 입력 예시 |
 |--------|------|-----------|
@@ -59,20 +67,37 @@ git checkout -b feature/WM-XXXXX
 
 ## 개발 워크플로우 (NEW)
 
-### 계획 → 구현 → 인수인계 흐름
+### 계획 → 구현 → 검증 → 인수인계 (Full Lifecycle)
 
 ```
-/create-plan 기능 설명        ← 구조적 계획 수립
-# ... 구현 작업 ...
-/debug 에러 설명              ← 문제 발생 시 조사
-/handoff                      ← 세션 종료 시 인수인계
-/resume-handoff               ← 다음 세션에서 이어서
+/create-plan 기능 설명        ← 1. 조사 → 설계 → 계획서 작성
+/iterate-plan 피드백          ← 2. 계획 수정 (필요시 반복)
+/implement-plan               ← 3. Phase별 구현 + 자동 검증
+/validate-plan                ← 4. 구현 결과 전체 검증
+/debug 에러 설명              ←    문제 발생 시 병렬 조사
+/workcheck                    ← 5. 영향 분석 + 스모크 테스트
+/workfinish                   ← 6. 커밋 + PR 생성
+/handoff                      ← 7. 세션 종료 시 인수인계
+/resume-handoff               ←    다음 세션에서 이어서
 ```
 
 ### 코드베이스 이해
 
 ```
 /research 주제                ← 코드베이스 탐색 & 문서화
+```
+
+### 에이전트 자동 호출 흐름 (예시)
+
+```
+사용자: /create-plan 메일 검색 필터 추가
+
+Claude (Opus):
+  ├─ spawn codebase-locator (Sonnet)       ← 관련 파일 찾기
+  ├─ spawn codebase-analyzer (Sonnet)      ← 기존 구현 분석
+  ├─ spawn codebase-pattern-finder (Sonnet) ← 유사 패턴 검색
+  ├─ spawn docs-locator (Sonnet)           ← 과거 관련 문서 탐색
+  └─ 종합하여 구현 계획서 작성
 ```
 
 ### 프로젝트 초기화
@@ -86,6 +111,52 @@ git checkout -b feature/WM-XXXXX
 #   .handoffs/      ← 핸드오프 문서 저장소
 #   .plans/         ← 구현 계획서 저장소
 #   .research/      ← 리서치 문서 저장소
+```
+
+---
+
+## 자동 서브에이전트 (NEW — humanlayer 영감)
+
+커맨드와 달리, 에이전트는 **사용자가 직접 호출하지 않습니다.** Claude가 작업 중 필요할 때 자동으로 spawns 합니다.
+
+### 에이전트 목록
+
+| 에이전트 | 용도 | 자동 호출 시점 |
+|----------|------|---------------|
+| `codebase-analyzer` | 코드 구현 상세 분석 (데이터 흐름, 로직) | `/create-plan`, `/research`, `/debug` |
+| `codebase-locator` | 파일/컴포넌트 위치 탐색 (Super Grep) | `/create-plan`, `/research`, `/implement-plan`, `/debug` |
+| `codebase-pattern-finder` | 유사 구현/패턴 찾기 + 코드 예시 | `/create-plan`, `/research`, `/implement-plan` |
+| `docs-locator` | 과거 문서 탐색 (.plans/.research/.handoffs/) | `/create-plan`, `/research`, `/resume-handoff`, `/debug` |
+| `docs-analyzer` | 과거 문서 인사이트 추출 (의사결정, 제약) | `/resume-handoff`, `/iterate-plan` |
+| `web-search-researcher` | 웹 검색으로 최신 정보 조사 | 외부 API/라이브러리 정보 필요할 때 |
+| `architecture-review` | 아키텍처 제안 검토 & 리스크 분석 | 설계 문서 리뷰 시 |
+| `endpoint-analysis` | API 엔드포인트 동작/계약 분석 | `/validate-plan`, 엔드포인트 분석 시 |
+| `pr-review-assistant` | PR 리스크 포커스 리뷰 | `/validate-plan`, PR 리뷰 시 |
+| `consistency-check` | 데이터 스냅샷 비교 & 불일치 탐지 | 데이터 정합성 확인 시 |
+| `document-summarizer` | 문서 요약 & 구조화 | 미팅 노트/설계 문서 정리 시 |
+| `pr-description-generator` | PR 설명 자동 생성 | PR 생성 시 |
+
+### 커맨드 vs 에이전트 차이
+
+```
+커맨드 (commands/)          에이전트 (agents/)
+──────────────────          ──────────────────
+사용자가 직접 호출           Claude가 자동 호출
+/create-plan 으로 실행      Claude가 필요할 때 spawn
+전체 워크플로우 정의         단일 전문 작업 수행
+Opus 모델 사용              Sonnet 모델 사용 (빠르고 저렴)
+```
+
+### 실제 동작 예시
+
+```
+사용자: /create-plan 메일 검색 필터 추가
+
+Claude (Opus):
+  ├─ spawn codebase-locator (Sonnet)    ← 관련 파일 찾기
+  ├─ spawn codebase-analyzer (Sonnet)   ← 기존 구현 분석
+  ├─ spawn codebase-pattern-finder (Sonnet) ← 유사 패턴 탐색
+  └─ 종합하여 구현 계획서 작성
 ```
 
 ---
@@ -261,12 +332,15 @@ TEST_ENDPOINTS.md에서 verify 컬럼으로 직접 지정 가능:
 
 ```
 ~/.claude-dotfiles/          ← git repo (cursor-setting)
-├── commands/                ← 커스텀 커맨드 (14개)
-│   ├── create-plan.md       ← NEW: 구조적 계획 수립
-│   ├── research.md          ← NEW: 코드베이스 리서치
-│   ├── debug.md             ← NEW: 구조적 디버깅
-│   ├── handoff.md           ← NEW: 세션 인수인계
-│   ├── resume-handoff.md    ← NEW: 핸드오프 재개
+├── commands/                ← 커스텀 커맨드 (17개)
+│   ├── create-plan.md         ← 구조적 계획 수립
+│   ├── implement-plan.md      ← 계획서 Phase별 구현
+│   ├── iterate-plan.md        ← 기존 계획서 수정
+│   ├── validate-plan.md       ← 구현 결과 검증
+│   ├── research.md            ← 코드베이스 리서치
+│   ├── debug.md               ← 구조적 디버깅
+│   ├── handoff.md             ← 세션 인수인계
+│   ├── resume-handoff.md      ← 핸드오프 재개
 │   ├── workcheck.md
 │   ├── workfinish.md
 │   ├── affected-endpoints.md
@@ -276,7 +350,19 @@ TEST_ENDPOINTS.md에서 verify 컬럼으로 직접 지정 가능:
 │   ├── pr-description.md
 │   ├── commit-suggest.md
 │   └── test-affected.md
-├── agents/                  ← 에이전트 설정
+├── agents/claude-code/      ← 자동 서브에이전트 (12개)
+│   ├── codebase-analyzer.md       ← 코드 구현 분석
+│   ├── codebase-locator.md        ← 파일/컴포넌트 위치 탐색
+│   ├── codebase-pattern-finder.md ← 코드 패턴/예시 탐색
+│   ├── docs-locator.md            ← 과거 문서 탐색 (지식 검색)
+│   ├── docs-analyzer.md           ← 과거 문서 인사이트 추출
+│   ├── web-search-researcher.md   ← 웹 검색 리서치
+│   ├── architecture-review.md
+│   ├── consistency-check.md
+│   ├── document-summarizer.md
+│   ├── endpoint-analysis.md
+│   ├── pr-description-generator.md
+│   └── pr-review-assistant.md
 ├── templates/               ← NEW: 프로젝트 템플릿
 │   └── CLAUDE.md.template
 ├── docs/                    ← NEW: 참고 문서

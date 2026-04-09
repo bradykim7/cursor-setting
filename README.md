@@ -1,56 +1,60 @@
-# Agent 1: Document Summarizer
+# cursor-setting
 
-내부 문서를 구조화된 운영 요약으로 정규화하는 에이전트입니다.
+Claude Code 커스텀 커맨드, 에이전트, 설정을 관리하는 dotfiles 레포입니다.
 
-## 설치
-
-```bash
-pip install anthropic
-export ANTHROPIC_API_KEY="your-key-here"
-```
-
-## 실행
+## Quick Start
 
 ```bash
-# 데모 (내장 샘플 문서)
-python agent.py --demo
-
-# 파일 입력
-python agent.py --file ./meeting_notes.md --type-hint meeting_notes
-
-# 텍스트 직접 입력
-python agent.py --text "회의록 내용..." --type-hint meeting_notes
-
-# 결과를 파일로 저장
-python agent.py --demo --output result.json
+git clone <repo-url> ~/cursor-setting
+cd ~/cursor-setting
+./install.sh
 ```
 
-## 출력 스키마
+## What's Included
 
-```json
-{
-  "document_type": "string",
-  "summary": "string",
-  "key_points": ["string"],
-  "decisions": ["string"],
-  "risks": ["string"],
-  "open_questions": ["string"],
-  "next_actions": [
-    { "action": "string", "owner": "string", "due_date": "string" }
-  ],
-  "source_gaps": ["string"]
-}
+### Commands (17개)
+
+| Category | Commands |
+|----------|----------|
+| **Plan Lifecycle** | `/create-plan`, `/implement-plan`, `/iterate-plan`, `/validate-plan` |
+| **Research & Debug** | `/research`, `/debug` |
+| **Session** | `/handoff`, `/resume-handoff` |
+| **Test** | `/workcheck`, `/affected-endpoints`, `/smoke-test`, `/branch-diff`, `/test-affected` |
+| **Commit & PR** | `/workfinish`, `/commit-mailplug`, `/commit-suggest`, `/pr-description` |
+
+### Agents (12개)
+
+Commands trigger these automatically — you don't call them directly.
+
+| Agent | Role |
+|-------|------|
+| `codebase-analyzer` | Code implementation analysis |
+| `codebase-locator` | File/component location (Super Grep) |
+| `codebase-pattern-finder` | Find similar patterns + code examples |
+| `docs-locator` | Search past plans/research/handoffs |
+| `docs-analyzer` | Extract insights from past documents |
+| `web-search-researcher` | Web search for up-to-date info |
+| `architecture-review` | Architecture risk analysis |
+| `endpoint-analysis` | API endpoint behavior analysis |
+| `pr-review-assistant` | PR risk-focused review |
+| `consistency-check` | Data snapshot comparison |
+| `document-summarizer` | Document summarization |
+| `pr-description-generator` | PR description generation |
+
+## Project Init
+
+```bash
+./install.sh init /path/to/project
 ```
 
-## 필드 설명
+Creates `CLAUDE.md` + `.handoffs/` + `.plans/` + `.research/` in the target project.
 
-| 필드 | 설명 |
-|------|------|
-| `document_type` | 감지된 문서 유형 |
-| `summary` | 핵심 요약 (1-3문장) |
-| `key_points` | 주요 내용 목록 |
-| `decisions` | 확정된 결정 사항 (제안 제외) |
-| `risks` | 식별된 리스크 |
-| `open_questions` | 미결 사항 |
-| `next_actions` | 후속 액션 (담당자 + 기한 포함) |
-| `source_gaps` | 문서에서 불명확하거나 누락된 정보 |
+## Docs
+
+- [Onboarding Guide](docs/onboarding.md) — 처음 사용자를 위한 소개
+- [Workflow Reference](WORKFLOW.md) — 전체 커맨드 & 워크플로우 상세
+- [Submodule Approach](docs/approach-a-submodule.md) — 팀 공유 시 대안 구조
+
+## Inspired by
+
+- [humanlayer/humanlayer](https://github.com/humanlayer/humanlayer) `.claude/` structure
