@@ -15,6 +15,8 @@ case "$SUBCMD" in
         # init: 프로젝트 레포에 CLAUDE.md 생성
         # ─────────────────────────────────────
         TARGET_DIR="${2:-.}"
+        # 틸드(~)를 $HOME으로 확장 (변수 안의 틸드는 쉘이 자동 확장하지 않음)
+        TARGET_DIR="${TARGET_DIR/#\~/$HOME}"
         TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
         CLAUDE_MD="$TARGET_DIR/CLAUDE.md"
 
