@@ -25,7 +25,7 @@ from pr_review_assistant.prompt import PR_REVIEW_ASSISTANT_PROMPT, PR_REVIEW_ASS
 # 설정
 # ---------------------------------------------------------------------------
 
-MODEL = "claude-sonnet-4-5"
+MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 4096
 
 SYSTEM_PROMPT = GLOBAL_AGENT_POLICY + "\n\n" + PR_REVIEW_ASSISTANT_PROMPT
