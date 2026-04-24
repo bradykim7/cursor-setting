@@ -49,6 +49,16 @@
 | `/pr-description` | PR 설명 자동 생성 | `/pr-description` |
 | `/commit-suggest` | 일반 커밋 메시지 추천 | `/commit-suggest` |
 
+### Claude Code 사용 통계 커맨드
+
+| 커맨드 | 용도 | 입력 예시 |
+|--------|------|-----------|
+| `/claude-usage-collect` | 본인 사용 데이터 수집 → 공유 zip 생성 | `/claude-usage-collect` |
+| `/claude-usage-analyze` | 본인 사용 분석 → 개인 리포트 | `/claude-usage-analyze 14d` |
+| `/claude-usage-report` | 팀원 JSON 수합 → 8섹션 팀 리포트 | `/claude-usage-report ./team-data 212482160` |
+
+**플로우**: 팀원들이 `collect` 실행 → zip 수합 → 팀장이 `report`로 통합 분석. 개인은 `analyze`로 스스로 점검.
+
 ---
 
 ## 빠른 사용법 (메타 커맨드)
@@ -332,7 +342,7 @@ TEST_ENDPOINTS.md에서 verify 컬럼으로 직접 지정 가능:
 
 ```
 ~/.claude-dotfiles/          ← git repo (cursor-setting)
-├── commands/                ← 커스텀 커맨드 (17개)
+├── commands/                ← 커스텀 커맨드 (20개)
 │   ├── create-plan.md         ← 구조적 계획 수립
 │   ├── implement-plan.md      ← 계획서 Phase별 구현
 │   ├── iterate-plan.md        ← 기존 계획서 수정
@@ -349,7 +359,10 @@ TEST_ENDPOINTS.md에서 verify 컬럼으로 직접 지정 가능:
 │   ├── commit-mailplug.md
 │   ├── pr-description.md
 │   ├── commit-suggest.md
-│   └── test-affected.md
+│   ├── test-affected.md
+│   ├── claude-usage-collect.md   ← 본인 사용 데이터 수집
+│   ├── claude-usage-analyze.md   ← 개인 사용 분석 리포트
+│   └── claude-usage-report.md    ← 팀 사용 집계 리포트
 ├── agents/claude-code/      ← 자동 서브에이전트 (12개)
 │   ├── codebase-analyzer.md       ← 코드 구현 분석
 │   ├── codebase-locator.md        ← 파일/컴포넌트 위치 탐색
