@@ -12,7 +12,7 @@ cd ~/cursor-setting
 
 ## What's Included
 
-### Commands (17개)
+### Commands (20개)
 
 | Category | Commands |
 |----------|----------|
@@ -21,6 +21,7 @@ cd ~/cursor-setting
 | **Session** | `/handoff`, `/resume-handoff` |
 | **Test** | `/workcheck`, `/affected-endpoints`, `/smoke-test`, `/branch-diff`, `/test-affected` |
 | **Commit & PR** | `/workfinish`, `/commit-mailplug`, `/commit-suggest`, `/pr-description` |
+| **Claude Usage** | `/claude-usage-collect`, `/claude-usage-analyze`, `/claude-usage-report` |
 
 ### Agents (12개)
 

@@ -5,7 +5,14 @@
       "Bash(mkdir -p python claude-code)",
       "Bash(mv architecture_review consistency_check document_summarizer endpoint_analysis pr_review_assistant shared python/)",
       "Bash(mv pr-description-generator.md claude-code/)",
-      "Bash(head:*)"
+      "Bash(head:*)",
+      "WebFetch(domain:gist.githubusercontent.com)",
+      "Bash(curl *)",
+      "Bash(env)",
+      "Bash(claude --version)",
+      "Bash(codex --version)",
+      "Bash(codex --help)",
+      "Bash(codex exec *)"
     ]
   }
 }

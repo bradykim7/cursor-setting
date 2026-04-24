@@ -17,7 +17,7 @@ Claude Code에서 사용하는 **커스텀 커맨드, 에이전트, 설정**을 
 
 ```
 cursor-setting/              ← 이 레포 (한 곳에 clone)
-├── commands/*.md            ← 슬래시 커맨드 정의 (17개)
+├── commands/*.md            ← 슬래시 커맨드 정의 (20개)
 ├── agents/claude-code/*.md  ← AI 서브에이전트 정의 (12개)
 └── settings.json            ← 글로벌 설정
 
@@ -175,6 +175,20 @@ cd ~/cursor-setting
 | `/commit-suggest` | 일반 커밋 메시지 추천 |
 | `/pr-description` | PR 설명 자동 생성 |
 
+### Claude Code 사용 통계
+
+Claude Code 자체의 사용량 (토큰/모델/세션/비용)을 집계/분석합니다. 내부적으로 [`ccusage`](https://www.npmjs.com/package/ccusage)를 사용합니다.
+
+| 커맨드 | 언제 쓰나 |
+|--------|----------|
+| `/claude-usage-collect` | 팀 집계에 참여할 때 — 본인 데이터를 zip으로 패키징 (대화 내용 없음) |
+| `/claude-usage-analyze` | 본인 사용을 점검할 때 — 라우팅/세션 위생/ROI 개인 리포트 |
+| `/claude-usage-report` | 팀 리포트를 만들 때 — 팀원 zip 수합 → 8섹션 분석 (+Confluence 옵션) |
+
+**사전 요건**: `npx` (Node.js) / `jq` / `zip`. 첫 실행 시 ccusage 패키지가 ~30초 동안 다운로드됩니다.
+
+**프라이버시**: 대화 내용, 프롬프트, 파일 내용은 **포함되지 않습니다**. 토큰 수, 모델명, 타임스탬프, 세션 ID 등 집계 값만 처리합니다.
+
 ---
 
 ## 에이전트 — 자동으로 동작하는 전문가들
@@ -256,6 +270,24 @@ Claude (Opus):
 /debug 로그인 실패 에러               ← 원인 조사
 # 수정 작업...
 /workfinish                           ← 커밋 + PR
+```
+
+### 시나리오: 팀 Claude Code 사용 리포트
+
+```
+── 팀장 ──
+(팀원들에게 공지) /claude-usage-collect 실행 후 생성된 zip 전달 요청
+
+── 팀원 (각자) ──
+/claude-usage-collect                  ← ~/Desktop/claude-usage-{본인}.zip 생성
+(팀장에게 zip 파일 전달)
+
+── 팀장 ──
+# 받은 zip 파일들을 team-data/ 폴더에 모은 뒤
+/claude-usage-report ./team-data 212482160   ← 8섹션 리포트 + Confluence 발행
+
+── 개인 점검 (선택) ──
+/claude-usage-analyze 14d              ← 본인 14일 사용 분석
 ```
 
 ---
