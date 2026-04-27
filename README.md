@@ -50,9 +50,26 @@ Commands trigger these automatically — you don't call them directly.
 
 Creates `CLAUDE.md` + `.handoffs/` + `.plans/` + `.research/` in the target project.
 
+## Obsidian Vault Init
+
+회사 지식 + 개발 지식 축적용 Obsidian vault를 부트스트랩합니다.
+
+```bash
+./install.sh obsidian-init ~/Documents/MyVault
+```
+
+Creates a vault with:
+- 폴더 구조 (`20-Company/` 회사 지식, `30-Development/` 개발 지식 분리)
+- 7가지 노트 템플릿 (데일리·미팅·ADR·기술 지식·트러블슈팅·용어집·주간 회고)
+- Claude Code 연동 (`CLAUDE.md` + `.claude/commands/` 슬래시 커맨드 3종)
+- Obsidian 코어 플러그인 자동 설정
+
+→ [Obsidian Onboarding Guide](docs/obsidian-onboarding.md) 따라하기 (10분)
+
 ## Docs
 
 - [Onboarding Guide](docs/onboarding.md) — 처음 사용자를 위한 소개
+- [Obsidian Onboarding](docs/obsidian-onboarding.md) — Obsidian vault 단계별 셋업
 - [Workflow Reference](WORKFLOW.md) — 전체 커맨드 & 워크플로우 상세
 - [Submodule Approach](docs/approach-a-submodule.md) — 팀 공유 시 대안 구조
 

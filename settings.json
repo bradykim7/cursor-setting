@@ -7,5 +7,6 @@
   "enabledPlugins": {
     "vercel@claude-plugins-official": false
   },
-  "theme": "light-daltonized"
+  "theme": "light-daltonized",
+  "effortLevel": "high"
 }
