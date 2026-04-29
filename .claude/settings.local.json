@@ -22,7 +22,8 @@
       "Bash(gh repo *)",
       "Bash(mkdir -p /Users/brady/workspace/Obsidian/.obsidian/plugins/obsidian-git)",
       "Bash(cp /Users/brady/workspace/cursor-setting/templates/obsidian/vault/.obsidian/community-plugins.json /Users/brady/workspace/Obsidian/.obsidian/community-plugins.json)",
-      "Bash(cp /Users/brady/workspace/cursor-setting/templates/obsidian/vault/.obsidian/plugins/obsidian-git/data.json /Users/brady/workspace/Obsidian/.obsidian/plugins/obsidian-git/data.json)"
+      "Bash(cp /Users/brady/workspace/cursor-setting/templates/obsidian/vault/.obsidian/plugins/obsidian-git/data.json /Users/brady/workspace/Obsidian/.obsidian/plugins/obsidian-git/data.json)",
+      "Bash(gh release *)"
     ]
   }
 }
