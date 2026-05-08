@@ -298,6 +298,17 @@ fi
 ln -s "$DOTFILES_DIR/settings.json" "$CLAUDE_DIR/settings.json"
 echo "[✓] settings.json → $DOTFILES_DIR/settings.json"
 
+# Step 5.5: Backup & Symlink - CLAUDE.md (global memory)
+echo "[*] CLAUDE.md 설정 중..."
+if [ -f "$CLAUDE_DIR/CLAUDE.md" ] && [ ! -L "$CLAUDE_DIR/CLAUDE.md" ]; then
+    echo "    기존 CLAUDE.md 백업 → CLAUDE.md.bak"
+    mv "$CLAUDE_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md.bak"
+elif [ -L "$CLAUDE_DIR/CLAUDE.md" ]; then
+    rm "$CLAUDE_DIR/CLAUDE.md"
+fi
+ln -s "$DOTFILES_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
+echo "[✓] CLAUDE.md → $DOTFILES_DIR/CLAUDE.md"
+
 echo ""
 
 # Step 6: urltest.http 설정 안내
@@ -314,7 +325,7 @@ echo ""
 echo "=== 설치 완료! ==="
 echo ""
 echo "Symlinks:"
-ls -la "$CLAUDE_DIR/commands" "$CLAUDE_DIR/agents" "$CLAUDE_DIR/skills" "$CLAUDE_DIR/settings.json"
+ls -la "$CLAUDE_DIR/commands" "$CLAUDE_DIR/agents" "$CLAUDE_DIR/skills" "$CLAUDE_DIR/settings.json" "$CLAUDE_DIR/CLAUDE.md"
 echo ""
 echo "사용 가능한 커맨드:"
 echo ""
