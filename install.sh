@@ -276,6 +276,17 @@ fi
 ln -s "$DOTFILES_DIR/agents/claude-code" "$CLAUDE_DIR/agents"
 echo "[✓] agents/ → $DOTFILES_DIR/agents/claude-code"
 
+# Step 4.5: Backup & Symlink - skills/
+echo "[*] skills/ 설정 중..."
+if [ -d "$CLAUDE_DIR/skills" ] && [ ! -L "$CLAUDE_DIR/skills" ]; then
+    echo "    기존 skills/ 백업 → skills.bak/"
+    mv "$CLAUDE_DIR/skills" "$CLAUDE_DIR/skills.bak"
+elif [ -L "$CLAUDE_DIR/skills" ]; then
+    rm "$CLAUDE_DIR/skills"
+fi
+ln -s "$DOTFILES_DIR/skills" "$CLAUDE_DIR/skills"
+echo "[✓] skills/ → $DOTFILES_DIR/skills"
+
 # Step 5: Backup & Symlink - settings.json
 echo "[*] settings.json 설정 중..."
 if [ -f "$CLAUDE_DIR/settings.json" ] && [ ! -L "$CLAUDE_DIR/settings.json" ]; then
@@ -303,7 +314,7 @@ echo ""
 echo "=== 설치 완료! ==="
 echo ""
 echo "Symlinks:"
-ls -la "$CLAUDE_DIR/commands" "$CLAUDE_DIR/agents" "$CLAUDE_DIR/settings.json"
+ls -la "$CLAUDE_DIR/commands" "$CLAUDE_DIR/agents" "$CLAUDE_DIR/skills" "$CLAUDE_DIR/settings.json"
 echo ""
 echo "사용 가능한 커맨드:"
 echo ""

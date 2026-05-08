@@ -42,6 +42,40 @@ Commands trigger these automatically — you don't call them directly.
 | `document-summarizer` | Document summarization |
 | `pr-description-generator` | PR description generation |
 
+### Skills (22개)
+
+Ported from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). Skills auto-fire when your phrasing matches their `description` field — no slash command needed.
+
+| Category | Skill | Triggers when you say… |
+|----------|-------|------------------------|
+| **engineering** | `setup-matt-pocock-skills` | "set up the engineering skills for this repo" — run first in any new project |
+| | `grill-with-docs` | "stress-test this plan against our domain model" |
+| | `to-prd` | "turn this conversation into a PRD" |
+| | `to-issues` | "break this plan into issues" |
+| | `triage` | "triage these incoming issues" |
+| | `tdd` | "let's TDD this", "red-green-refactor" |
+| | `diagnose` | "diagnose this bug", "this is broken/throwing/failing" |
+| | `improve-codebase-architecture` | "find refactoring opportunities", "improve architecture" |
+| | `prototype` | "let me prototype this", "try a few UI variations" |
+| | `zoom-out` | "zoom out", "give me the bigger picture" |
+| **productivity** | `grill-me` | "grill me on this plan", "interview me" |
+| | `caveman` | (terse output mode) |
+| | `write-a-skill` | "create a new skill" |
+| **misc** | `git-guardrails-claude-code` | "block dangerous git commands", "add git safety hooks" |
+| | `setup-pre-commit` | "set up pre-commit hooks", "add Husky + lint-staged" |
+| | `migrate-to-shoehorn` | "replace `as` with shoehorn in tests" |
+| | `scaffold-exercises` | "scaffold an exercise structure" |
+| **personal** | `edit-article` | "edit/revise this article" |
+| | `obsidian-vault` | "find/create a note in Obsidian" |
+| **in-progress** | `writing-fragments` | "ideate", "fragments", "raw material" |
+| | `writing-shape` | "shape these notes into an article" |
+| | `writing-beats` | "assemble this as a narrative" |
+
+**Commands vs Agents vs Skills:**
+- **Commands** (`/foo`) — you invoke explicitly. Full workflows.
+- **Agents** — Claude spawns them automatically inside commands. Specialized single tasks.
+- **Skills** — auto-fire from your phrasing. Trigger via `description` matching.
+
 ## Project Init
 
 ```bash

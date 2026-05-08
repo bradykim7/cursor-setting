@@ -171,6 +171,68 @@ Claude (Opus):
 
 ---
 
+## 자동 스킬 (NEW — mattpocock/skills 포팅)
+
+스킬은 **프롬프트 내용으로 자동 호출**됩니다. 슬래시 커맨드로 부르지 않고, 사용자 발화가 스킬의 `description` 필드와 매칭되면 Claude가 알아서 트리거합니다.
+
+### 커맨드 vs 에이전트 vs 스킬
+
+```
+커맨드 (commands/)        에이전트 (agents/)         스킬 (skills/)
+──────────────────        ──────────────────         ──────────────────
+사용자가 직접 호출         Claude가 커맨드 안에서      사용자 발화 매칭으로
+/foo 로 실행              자동 spawn                자동 호출
+전체 워크플로우 정의       전문 단일 작업              자동 발화 트리거
+```
+
+### 스킬 목록 (22개)
+
+| 카테고리 | 스킬 | 자동 호출 트리거 |
+|----------|------|------------------|
+| **engineering** | `setup-matt-pocock-skills` | 새 프로젝트에서 처음 실행 — issue tracker, 도메인 문서 위치를 다른 스킬들에게 알려주는 부트스트랩 |
+| | `grill-with-docs` | "도메인 모델에 비추어 이 계획 까봐줘" |
+| | `to-prd` | "이 대화를 PRD로 만들어줘" |
+| | `to-issues` | "이 계획을 이슈로 쪼개줘" |
+| | `triage` | "들어온 이슈들 triage 해줘" |
+| | `tdd` | "TDD로 가자", "red-green-refactor" |
+| | `diagnose` | "이 버그 진단", "에러 발생", "성능 회귀" |
+| | `improve-codebase-architecture` | "리팩토링 기회 찾기", "아키텍처 개선" |
+| | `prototype` | "프로토타입 만들어보자", "UI 시안 몇 개" |
+| | `zoom-out` | "큰 그림 보여줘", "맥락 좀 줘" |
+| **productivity** | `grill-me` | "이 계획 까봐줘", "interview me" |
+| | `caveman` | 간결 출력 모드 |
+| | `write-a-skill` | "새 스킬 만들어줘" |
+| **misc** | `git-guardrails-claude-code` | "위험한 git 명령 차단", "git 안전 훅 추가" |
+| | `setup-pre-commit` | "pre-commit hook 설정", "Husky + lint-staged" |
+| | `migrate-to-shoehorn` | "테스트의 `as`를 shoehorn으로 바꿔줘" |
+| | `scaffold-exercises` | "exercise 구조 만들어줘" |
+| **personal** | `edit-article` | "이 글 수정/개선해줘" |
+| | `obsidian-vault` | "Obsidian에서 노트 찾기/만들기" |
+| **in-progress** | `writing-fragments` | "ideate", "fragments", "글 raw material" |
+| | `writing-shape` | "이 노트들을 글로 만들어줘" |
+| | `writing-beats` | "내러티브로 조립해줘" |
+
+### 기존 커맨드와의 중복 (참고)
+
+같은 의도, 다른 형태 — 둘 다 유효하지만 사용 시점이 다릅니다:
+
+| 기존 커맨드 | 새 스킬 | 차이 |
+|-------------|---------|------|
+| `/debug` | `diagnose` | `/debug`는 병렬 조사 워크플로우. `diagnose`는 reproduce → minimize → instrument 엄격 루프 (HITL 포함) |
+| `/create-plan` (한방) | `grill-with-docs` + `to-prd` + `to-issues` (체인) | `/create-plan`은 한번에. Matt 방식은 점진적 |
+
+### 새 프로젝트에서 시작하기
+
+```
+1. ./install.sh init /path/to/project        ← CLAUDE.md + .handoffs/ + .plans/ 생성
+2. cd /path/to/project
+3. (Claude 세션에서) "set up the engineering skills"  ← setup-matt-pocock-skills 자동 호출
+4. AGENTS.md 또는 CLAUDE.md에 issue tracker, triage labels, 도메인 문서 경로 자동 기록됨
+5. 이후 tdd, triage, diagnose 등 다른 엔지니어링 스킬이 컨텍스트를 알고 동작
+```
+
+---
+
 ## 상세 워크플로우 (기존 커맨드)
 
 ### 1단계: 브랜치 생성 & 코드 작업
