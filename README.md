@@ -1,12 +1,15 @@
-# cursor-setting
+# agcoco
 
-Claude Code 커스텀 커맨드, 에이전트, 설정을 관리하는 dotfiles 레포입니다.
+> **agcoco** = **Ag**ent-**Co**ding-**Co**nfig — pronounced "AG-co-co".
+> AI 에이전트 코딩을 위한 개인 dotfiles 레포 (Claude Code, Codex 등 멀티툴 지원).
+
+Personal dotfiles repo for AI agent-assisted coding. Manages custom slash commands, sub-agents, skills, and per-tool symlinks for any CLI that follows the `AGENTS.md` convention (Claude Code, Codex, and easily extensible to Gemini / Cursor / Aider / Continue via `tools/<name>.sh`).
 
 ## Quick Start
 
 ```bash
-git clone <repo-url> ~/cursor-setting
-cd ~/cursor-setting
+git clone <repo-url> ~/agcoco
+cd ~/agcoco
 ./install.sh
 ```
 

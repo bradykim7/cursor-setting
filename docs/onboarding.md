@@ -1,13 +1,14 @@
-# cursor-setting 온보딩 가이드
+# agcoco 온보딩 가이드
 
 > Claude Code를 처음 사용하는 사람을 위한 소개 문서입니다.
 
 ---
 
-## cursor-setting이란?
+## agcoco란?
 
-Claude Code에서 사용하는 **커스텀 커맨드, 에이전트, 설정**을 모아둔 dotfiles 레포입니다.
-한 번 설치하면 어떤 프로젝트에서든 `/커맨드이름`으로 바로 사용할 수 있습니다.
+**agcoco** = **Ag**ent-**Co**ding-**Co**nfig — AI 에이전트 코딩을 위한 개인 dotfiles 레포.
+**커스텀 커맨드, 에이전트, 스킬, 설정**을 한 곳에서 관리합니다.
+한 번 설치하면 어떤 프로젝트에서든 `/커맨드이름`으로 바로 사용할 수 있고, Claude Code/Codex 등 멀티 AI CLI를 동시에 지원합니다.
 
 ---
 
@@ -16,7 +17,7 @@ Claude Code에서 사용하는 **커스텀 커맨드, 에이전트, 설정**을 
 ### 전체 구조
 
 ```
-cursor-setting/              ← 이 레포 (한 곳에 clone)
+agcoco/              ← 이 레포 (한 곳에 clone)
 ├── AGENTS.md                ← 모든 AI 에이전트가 공유하는 canonical 컨텍스트 (openclaw 패턴)
 ├── CLAUDE.md → AGENTS.md    ← Claude Code 이름으로 부르는 in-repo symlink
 ├── commands/*.md            ← 슬래시 커맨드 정의 (20개)
@@ -29,20 +30,20 @@ cursor-setting/              ← 이 레포 (한 곳에 clone)
         ▼
 
 ~/.claude/                   ← Claude Code 글로벌 디렉토리
-├── CLAUDE.md     → cursor-setting/AGENTS.md
-├── commands/     → cursor-setting/commands/
-├── agents/       → cursor-setting/agents/claude-code/
-├── skills/       → cursor-setting/skills/
-└── settings.json → cursor-setting/settings.json
+├── CLAUDE.md     → agcoco/AGENTS.md
+├── commands/     → agcoco/commands/
+├── agents/       → agcoco/agents/claude-code/
+├── skills/       → agcoco/skills/
+└── settings.json → agcoco/settings.json
 
 ~/.codex/                    ← Codex CLI 글로벌 디렉토리 (설치 시 자동 추가)
-├── AGENTS.md → cursor-setting/AGENTS.md
-└── skills/   → cursor-setting/skills/
+├── AGENTS.md → agcoco/AGENTS.md
+└── skills/   → agcoco/skills/
 
 ~/.<other>/                  ← tools/<name>.sh 추가 시 어떤 AI CLI든 자동 연결
 ```
 
-`install.sh`가 **symlink**를 생성하므로, cursor-setting에서 파일을 수정하면 즉시 반영됩니다. AGENTS.md 한 파일이 Claude Code/Codex 양쪽에서 동일하게 로딩됩니다.
+`install.sh`가 **symlink**를 생성하므로, agcoco에서 파일을 수정하면 즉시 반영됩니다. AGENTS.md 한 파일이 Claude Code/Codex 양쪽에서 동일하게 로딩됩니다.
 
 ### 커맨드 (commands/)
 
@@ -120,13 +121,13 @@ my-project/
 ### 1. 레포 클론
 
 ```bash
-git clone <cursor-setting-repo-url> ~/cursor-setting
+git clone <agcoco-repo-url> ~/agcoco
 ```
 
 ### 2. 글로벌 설치
 
 ```bash
-cd ~/cursor-setting
+cd ~/agcoco
 ./install.sh
 ```
 

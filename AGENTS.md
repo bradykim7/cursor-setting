@@ -4,7 +4,7 @@ Canonical agent context shared by every CLI that follows the `AGENTS.md` convent
 
 - `~/.claude/CLAUDE.md` — Claude Code (loaded every session)
 - `~/.codex/AGENTS.md` — Codex CLI (when installed)
-- `CLAUDE.md` (sibling in this repo) → symlink to `AGENTS.md` so local Claude Code sessions in `cursor-setting/` also see it
+- `CLAUDE.md` (sibling in this repo) → symlink to `AGENTS.md` so local Claude Code sessions in `agcoco/` also see it
 
 Keep it tight — it's always in context.
 
@@ -42,7 +42,7 @@ Keep it tight — it's always in context.
 
 ## Per-repo behavior
 
-- **In `cursor-setting/`**: read `WORKFLOW.md` upfront before suggesting workflow changes — it's the source of truth for commands/agents/skills inventory.
+- **In `agcoco/`**: read `WORKFLOW.md` upfront before suggesting workflow changes — it's the source of truth for commands/agents/skills inventory.
 - **In a fresh project (no `AGENTS.md`/`CLAUDE.md` with `## Agent skills` block)**: suggest running `setup-matt-pocock-skills` skill first to bootstrap context for `tdd`, `triage`, `to-prd`, `to-issues`, `diagnose`, etc.
 
 ## Anti-patterns to avoid

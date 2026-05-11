@@ -403,7 +403,7 @@ TEST_ENDPOINTS.md에서 verify 컬럼으로 직접 지정 가능:
 ### dotfiles 구조
 
 ```
-~/.claude-dotfiles/          ← git repo (cursor-setting)
+~/.claude-dotfiles/          ← git repo (agcoco)
 ├── commands/                ← 커스텀 커맨드 (20개)
 │   ├── create-plan.md         ← 구조적 계획 수립
 │   ├── implement-plan.md      ← 계획서 Phase별 구현

@@ -18,7 +18,7 @@
 
 - macOS / Linux / Windows (이 가이드는 macOS 기준)
 - Obsidian 앱 설치: https://obsidian.md/download
-- Claude Code 설치 + cursor-setting 글로벌 설치 완료
+- Claude Code 설치 + agcoco 글로벌 설치 완료
   - 미완료면 [메인 README](../README.md) 의 Quick Start 먼저 진행
 
 ---
@@ -28,7 +28,7 @@
 터미널에서:
 
 ```bash
-cd ~/cursor-setting    # cursor-setting 레포 위치
+cd ~/agcoco    # agcoco 레포 위치
 ./install.sh obsidian-init ~/Documents/MyVault
 ```
 
@@ -260,7 +260,7 @@ git push -u origin "$(git branch --show-current)"
 - vault의 `.claude/commands/` 디렉토리가 있는지 확인 (`ls -la ~/Documents/MyVault/.claude/`)
 - 없으면 `obsidian-init` 가 hidden 파일을 못 복사한 것 — 수동 복사:
   ```bash
-  cp -a ~/cursor-setting/templates/obsidian/vault/.claude ~/Documents/MyVault/
+  cp -a ~/agcoco/templates/obsidian/vault/.claude ~/Documents/MyVault/
   ```
 
 ### Obsidian이 노트 변경을 인식 못함

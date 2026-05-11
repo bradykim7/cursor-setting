@@ -13,7 +13,7 @@ TOOL_CMD=""               # 감지에 쓸 바이너리 이름 — `command -v <T
 TOOL_DIR=""               # config 디렉토리 (e.g., "$HOME/.gemini")
 
 # 각 항목: "<target relative to TOOL_DIR>=<source relative to DOTFILES_DIR>"
-# Source 파일이 cursor-setting/ 안에 존재해야 함 — 없으면 그 entry는 스킵됨.
+# Source 파일이 agcoco/ 안에 존재해야 함 — 없으면 그 entry는 스킵됨.
 # Target 경로는 nested 가능 (e.g., "plugins/my-plugin/config.json").
 TOOL_SYMLINKS=(
     # "AGENTS.md=AGENTS.md"
