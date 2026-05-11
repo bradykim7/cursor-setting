@@ -7,7 +7,7 @@
   "enabledPlugins": {
     "vercel@claude-plugins-official": false
   },
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "theme": "light-daltonized",
   "model": "sonnet"
 }
