@@ -76,6 +76,27 @@ Ported from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). Ski
 - **Agents** — Claude spawns them automatically inside commands. Specialized single tasks.
 - **Skills** — auto-fire from your phrasing. Trigger via `description` matching.
 
+## Multi-Tool Support (`tools/` registry)
+
+Tool-agnostic — `install.sh` runs a generic loop over `tools/*.sh`, auto-detects whatever CLIs are installed, and creates the declared symlinks. `AGENTS.md` is the **canonical** agent context (openclaw pattern); each tool's expected memory filename is a symlink to it.
+
+**Shipped (verified):**
+
+| File | Tool | Detection | Symlinks created |
+|---|---|---|---|
+| `tools/claude.sh` | Claude Code | `command -v claude` | `~/.claude/CLAUDE.md` → `AGENTS.md`, `commands`, `agents`, `skills`, `settings.json` |
+| `tools/codex.sh` | Codex CLI | `command -v codex` | `~/.codex/AGENTS.md` → `AGENTS.md`, `skills` (same SKILL.md format) |
+
+**Add any other tool** — Gemini, Cursor agent, Aider, Continue, etc:
+
+```bash
+cp tools/_template.sh tools/<your-tool>.sh
+$EDITOR tools/<your-tool>.sh    # fill in 4 vars: TOOL_NAME, TOOL_CMD, TOOL_DIR, TOOL_SYMLINKS
+./install.sh                    # auto-detected from the next run on
+```
+
+`_template.sh` has commented-out example definitions for Gemini, Cursor, Aider, and Continue. See `tools/README.md` for the convention details. Tools whose CLI isn't installed are listed under "건너뛴 툴" and skipped silently.
+
 ## Project Init
 
 ```bash

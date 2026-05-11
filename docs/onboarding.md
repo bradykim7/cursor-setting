@@ -17,20 +17,32 @@ Claude Code에서 사용하는 **커스텀 커맨드, 에이전트, 설정**을 
 
 ```
 cursor-setting/              ← 이 레포 (한 곳에 clone)
+├── AGENTS.md                ← 모든 AI 에이전트가 공유하는 canonical 컨텍스트 (openclaw 패턴)
+├── CLAUDE.md → AGENTS.md    ← Claude Code 이름으로 부르는 in-repo symlink
 ├── commands/*.md            ← 슬래시 커맨드 정의 (20개)
 ├── agents/claude-code/*.md  ← AI 서브에이전트 정의 (12개)
-└── settings.json            ← 글로벌 설정
+├── skills/                  ← 자동 발동 스킬 (22개, mattpocock 포팅)
+├── settings.json            ← 글로벌 설정
+└── tools/*.sh               ← 각 AI CLI 정의 (claude.sh, codex.sh, _template.sh)
 
-        │  install.sh (symlink 생성)
+        │  install.sh — tools/*.sh 순회하며 설치된 CLI 자동 감지
         ▼
 
-~/.claude/                   ← Claude Code가 읽는 글로벌 설정 디렉토리
-├── commands/ → cursor-setting/commands/
-├── agents/  → cursor-setting/agents/claude-code/
+~/.claude/                   ← Claude Code 글로벌 디렉토리
+├── CLAUDE.md     → cursor-setting/AGENTS.md
+├── commands/     → cursor-setting/commands/
+├── agents/       → cursor-setting/agents/claude-code/
+├── skills/       → cursor-setting/skills/
 └── settings.json → cursor-setting/settings.json
+
+~/.codex/                    ← Codex CLI 글로벌 디렉토리 (설치 시 자동 추가)
+├── AGENTS.md → cursor-setting/AGENTS.md
+└── skills/   → cursor-setting/skills/
+
+~/.<other>/                  ← tools/<name>.sh 추가 시 어떤 AI CLI든 자동 연결
 ```
 
-`install.sh`가 **symlink**를 생성하므로, cursor-setting에서 파일을 수정하면 즉시 반영됩니다.
+`install.sh`가 **symlink**를 생성하므로, cursor-setting에서 파일을 수정하면 즉시 반영됩니다. AGENTS.md 한 파일이 Claude Code/Codex 양쪽에서 동일하게 로딩됩니다.
 
 ### 커맨드 (commands/)
 
@@ -118,7 +130,9 @@ cd ~/cursor-setting
 ./install.sh
 ```
 
-이것만으로 `~/.claude/`에 symlink가 생성되고, 모든 커맨드를 사용할 수 있습니다.
+이것만으로 **설치된 모든 AI CLI** (Claude Code, Codex 등)의 글로벌 디렉토리에 symlink가 자동 생성됩니다. `tools/*.sh`에 정의된 각 툴마다 `command -v <CLI>` 로 설치 여부를 확인 후, 감지된 것만 연결합니다. 미설치된 툴은 "건너뛴 툴"로 표시되고 나중에 설치한 뒤 `./install.sh` 재실행하면 자동 추가됩니다.
+
+새 AI CLI를 추가하려면 `tools/_template.sh` 를 복사해서 4개 변수만 채우면 됩니다 — 자세히는 [`tools/README.md`](../tools/README.md).
 
 ### 3. (선택) 프로젝트별 초기화
 

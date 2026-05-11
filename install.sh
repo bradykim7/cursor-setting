@@ -2,7 +2,8 @@
 set -e
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
-CLAUDE_DIR="$HOME/.claude"
+TOOLS_DIR="$DOTFILES_DIR/tools"
+CLAUDE_DIR="$HOME/.claude"  # Claude Code 부트스트랩(Step 1)에서만 사용; symlink 설치는 tools/claude.sh 로
 
 # ─────────────────────────────────────────────
 # 서브커맨드 분기
@@ -195,10 +196,16 @@ CLAUDEEOF
         echo "사용법: ./install.sh [command] [options]"
         echo ""
         echo "Commands:"
-        echo "  install                 글로벌 설치 (기본값) — ~/.claude/에 symlink 생성"
+        echo "  install                 글로벌 설치 (기본값) — ~/.claude/ + (감지 시) ~/.codex/ symlink 생성"
         echo "  init [path]             프로젝트 초기화 — CLAUDE.md + 작업 디렉토리 생성"
         echo "  obsidian-init <path>    Obsidian vault 부트스트랩 — 폴더 구조 + 템플릿 + Claude Code 연동"
         echo "  help                    이 도움말 표시"
+        echo ""
+        echo "멀티툴 지원:"
+        echo "  - install 실행 시 tools/*.sh 의 모든 정의를 순회하며 설치된 CLI 자동 감지"
+        echo "  - 기본 포함: Claude Code, Codex CLI"
+        echo "  - 새 툴 추가: cp tools/_template.sh tools/<name>.sh 후 4개 변수만 채우면 끝"
+        echo "  - 자세히: tools/README.md"
         echo ""
         echo "Examples:"
         echo "  ./install.sh                                    # 글로벌 설치"
@@ -219,10 +226,12 @@ esac
 # install: 글로벌 설치 (기존 로직)
 # ─────────────────────────────────────────────
 
-echo "=== Claude Code Dotfiles Installer ==="
+echo "=== AI Agent Dotfiles Installer ==="
+echo "  멀티툴 지원: tools/*.sh 에 정의된 모든 CLI를 자동 감지하여 symlink"
 echo ""
 
-# Step 1: Check if Claude Code is installed
+# Step 1: Claude Code 부트스트랩 — primary tool 이므로 미설치 시 npm 자동 설치 제안
+#         (다른 툴들은 사용자가 직접 설치한 경우에만 symlink 됨)
 if ! command -v claude &> /dev/null; then
     echo "[!] Claude Code가 설치되어 있지 않습니다."
     echo ""
@@ -247,71 +256,96 @@ fi
 echo "[✓] Claude Code: $(claude --version 2>/dev/null || echo 'installed')"
 echo ""
 
-# Step 2: Ensure ~/.claude/ directory exists
-if [ ! -d "$CLAUDE_DIR" ]; then
-    echo "[*] ~/.claude/ 디렉토리가 없습니다. 생성합니다..."
-    mkdir -p "$CLAUDE_DIR"
-    echo "[✓] ~/.claude/ 생성 완료"
+# ─────────────────────────────────────────────
+# Step 2: 멀티툴 symlink — tools/ 디렉토리의 정의 자동 로딩
+# ─────────────────────────────────────────────
+# 각 tools/<name>.sh 가 TOOL_NAME / TOOL_CMD / TOOL_DIR / TOOL_SYMLINKS 4개 변수를
+# export 함. 이 install_tool 함수가 그 정의를 받아서:
+#   1) command -v $TOOL_CMD 로 설치 확인 → 미설치면 스킵
+#   2) $TOOL_DIR mkdir -p
+#   3) TOOL_SYMLINKS 의 각 "target=source" 엔트리에 대해 backup + symlink
+
+INSTALLED_TOOLS=()
+SKIPPED_TOOLS=()
+INSTALLED_SYMLINKS=()
+
+install_tool() {
+    local tool_file="$1"
+    local tool_basename
+    tool_basename=$(basename "$tool_file" .sh)
+
+    # _ 로 시작하는 파일은 템플릿/비활성 — 스킵
+    if [[ "$tool_basename" == _* ]]; then
+        return
+    fi
+
+    # 이전 sourced 값 정리
+    unset TOOL_NAME TOOL_CMD TOOL_DIR
+    TOOL_SYMLINKS=()
+
+    # shellcheck source=/dev/null
+    source "$tool_file"
+
+    # 필수 변수 검증
+    if [ -z "$TOOL_NAME" ] || [ -z "$TOOL_CMD" ] || [ -z "$TOOL_DIR" ]; then
+        echo "[!] $tool_basename: TOOL_NAME/CMD/DIR 누락 — 스킵"
+        return
+    fi
+
+    # 감지
+    if ! command -v "$TOOL_CMD" &> /dev/null; then
+        echo "[i] $TOOL_NAME ($TOOL_CMD) 미설치 — 건너뜀"
+        SKIPPED_TOOLS+=("$TOOL_NAME")
+        return
+    fi
+
+    echo "[*] $TOOL_NAME 감지됨 → $TOOL_DIR/ 설정"
+    mkdir -p "$TOOL_DIR"
+
+    local entry target_rel source_rel target_path source_path
+    for entry in "${TOOL_SYMLINKS[@]}"; do
+        target_rel="${entry%%=*}"
+        source_rel="${entry#*=}"
+        target_path="$TOOL_DIR/$target_rel"
+        source_path="$DOTFILES_DIR/$source_rel"
+
+        if [ ! -e "$source_path" ]; then
+            echo "    [!] source 없음 — 스킵: $source_rel"
+            continue
+        fi
+
+        # 기존 실제 파일/디렉토리는 .bak 백업
+        if [ -e "$target_path" ] && [ ! -L "$target_path" ]; then
+            echo "    기존 $target_rel 백업 → $target_rel.bak"
+            mv "$target_path" "$target_path.bak"
+        elif [ -L "$target_path" ]; then
+            rm "$target_path"
+        fi
+
+        # nested target (e.g., "plugins/foo/data.json") 지원
+        mkdir -p "$(dirname "$target_path")"
+
+        ln -s "$source_path" "$target_path"
+        echo "    [✓] $target_path → $source_path"
+        INSTALLED_SYMLINKS+=("$target_path")
+    done
+
+    INSTALLED_TOOLS+=("$TOOL_NAME")
+    echo ""
+}
+
+if [ ! -d "$TOOLS_DIR" ]; then
+    echo "[✗] tools/ 디렉토리를 찾을 수 없습니다: $TOOLS_DIR"
+    exit 1
 fi
 
-# Step 3: Backup & Symlink - commands/
-echo "[*] commands/ 설정 중..."
-if [ -d "$CLAUDE_DIR/commands" ] && [ ! -L "$CLAUDE_DIR/commands" ]; then
-    echo "    기존 commands/ 백업 → commands.bak/"
-    mv "$CLAUDE_DIR/commands" "$CLAUDE_DIR/commands.bak"
-elif [ -L "$CLAUDE_DIR/commands" ]; then
-    rm "$CLAUDE_DIR/commands"
-fi
-ln -s "$DOTFILES_DIR/commands" "$CLAUDE_DIR/commands"
-echo "[✓] commands/ → $DOTFILES_DIR/commands"
+for tool_file in "$TOOLS_DIR"/*.sh; do
+    [ -f "$tool_file" ] && install_tool "$tool_file"
+done
 
-# Step 4: Backup & Symlink - agents/claude-code/ → ~/.claude/agents/
-echo "[*] agents/ 설정 중..."
-if [ -d "$CLAUDE_DIR/agents" ] && [ ! -L "$CLAUDE_DIR/agents" ]; then
-    echo "    기존 agents/ 백업 → agents.bak/"
-    mv "$CLAUDE_DIR/agents" "$CLAUDE_DIR/agents.bak"
-elif [ -L "$CLAUDE_DIR/agents" ]; then
-    rm "$CLAUDE_DIR/agents"
-fi
-ln -s "$DOTFILES_DIR/agents/claude-code" "$CLAUDE_DIR/agents"
-echo "[✓] agents/ → $DOTFILES_DIR/agents/claude-code"
-
-# Step 4.5: Backup & Symlink - skills/
-echo "[*] skills/ 설정 중..."
-if [ -d "$CLAUDE_DIR/skills" ] && [ ! -L "$CLAUDE_DIR/skills" ]; then
-    echo "    기존 skills/ 백업 → skills.bak/"
-    mv "$CLAUDE_DIR/skills" "$CLAUDE_DIR/skills.bak"
-elif [ -L "$CLAUDE_DIR/skills" ]; then
-    rm "$CLAUDE_DIR/skills"
-fi
-ln -s "$DOTFILES_DIR/skills" "$CLAUDE_DIR/skills"
-echo "[✓] skills/ → $DOTFILES_DIR/skills"
-
-# Step 5: Backup & Symlink - settings.json
-echo "[*] settings.json 설정 중..."
-if [ -f "$CLAUDE_DIR/settings.json" ] && [ ! -L "$CLAUDE_DIR/settings.json" ]; then
-    echo "    기존 settings.json 백업 → settings.json.bak"
-    mv "$CLAUDE_DIR/settings.json" "$CLAUDE_DIR/settings.json.bak"
-elif [ -L "$CLAUDE_DIR/settings.json" ]; then
-    rm "$CLAUDE_DIR/settings.json"
-fi
-ln -s "$DOTFILES_DIR/settings.json" "$CLAUDE_DIR/settings.json"
-echo "[✓] settings.json → $DOTFILES_DIR/settings.json"
-
-# Step 5.5: Backup & Symlink - CLAUDE.md (global memory)
-echo "[*] CLAUDE.md 설정 중..."
-if [ -f "$CLAUDE_DIR/CLAUDE.md" ] && [ ! -L "$CLAUDE_DIR/CLAUDE.md" ]; then
-    echo "    기존 CLAUDE.md 백업 → CLAUDE.md.bak"
-    mv "$CLAUDE_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md.bak"
-elif [ -L "$CLAUDE_DIR/CLAUDE.md" ]; then
-    rm "$CLAUDE_DIR/CLAUDE.md"
-fi
-ln -s "$DOTFILES_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
-echo "[✓] CLAUDE.md → $DOTFILES_DIR/CLAUDE.md"
-
-echo ""
-
-# Step 6: urltest.http 설정 안내
+# ─────────────────────────────────────────────
+# Step 3: urltest.http 설정 안내
+# ─────────────────────────────────────────────
 if [ ! -f "$DOTFILES_DIR/urltest.http" ]; then
     echo "[!] urltest.http가 없습니다. 템플릿에서 복사 후 토큰을 설정해주세요:"
     echo "    cp $DOTFILES_DIR/urltest.http.example $DOTFILES_DIR/urltest.http"
@@ -324,8 +358,17 @@ fi
 echo ""
 echo "=== 설치 완료! ==="
 echo ""
-echo "Symlinks:"
-ls -la "$CLAUDE_DIR/commands" "$CLAUDE_DIR/agents" "$CLAUDE_DIR/skills" "$CLAUDE_DIR/settings.json" "$CLAUDE_DIR/CLAUDE.md"
+if [ ${#INSTALLED_TOOLS[@]} -gt 0 ]; then
+    echo "활성화된 툴 (${#INSTALLED_TOOLS[@]}): ${INSTALLED_TOOLS[*]}"
+fi
+if [ ${#SKIPPED_TOOLS[@]} -gt 0 ]; then
+    echo "건너뛴 툴   (${#SKIPPED_TOOLS[@]}): ${SKIPPED_TOOLS[*]}  ← 설치 후 ./install.sh 재실행하면 자동 연결"
+fi
+echo ""
+if [ ${#INSTALLED_SYMLINKS[@]} -gt 0 ]; then
+    echo "생성된 symlinks:"
+    ls -la "${INSTALLED_SYMLINKS[@]}"
+fi
 echo ""
 echo "사용 가능한 커맨드:"
 echo ""
