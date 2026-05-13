@@ -106,7 +106,7 @@ Type legend: **(cmd)** slash command · **(skill)** auto-firing skill · **(agen
 - `git-guardrails-claude-code` (skill, A) — "block dangerous git", "위험한 git 막아줘"
 
 ### Personal & writing
-- `obsidian-vault` (skill, A) — "save to Obsidian", "노트로 저장", "find a note"
+- `obsidian-vault` (skill, A) — **requires explicit keyword "Obsidian" / "노트" / "옵시디언" / "note"**. Examples: "save this to Obsidian", "옵시디언에 저장해", "노트로 저장", "find a note", "옵시디언에서 찾아줘". Generic "save this" / "이거 저장해" alone does **not** fire this — ask which destination instead.
 - `edit-article` (skill, A) — "edit this article", "글 다듬어줘"
 - `writing-fragments` (skill, A) — "ideate", "fragments", "raw material"
 - `writing-shape` (skill, A) — "shape these notes into article"
@@ -132,7 +132,7 @@ Type legend: **(cmd)** slash command · **(skill)** auto-firing skill · **(agen
 - **`/handoff` (command) only** — there is no `handoff` skill (deleted as duplicate). Always use `/handoff`, paired with `/resume-handoff`.
 - **`/create-plan` vs `grill-with-docs` + `to-prd` + `to-issues`** — `/create-plan` is one-shot and faster. The skill chain is incremental and produces persistent artifacts (PRDs + issues). Ad-hoc planning → command; formal scoping → skill chain.
 - **`/workfinish` vs piecewise `/commit-suggest` + `/pr-description`** — `/workfinish` runs both. Use it on "wrap up" / "마무리". Use the individual commands when user asks for just one.
-- **`obsidian-vault` skill vs proactive Obsidian saving rule below** — the skill is for explicit "save/find a note" requests. The proactive rule is for moments where I notice something worth capturing without being asked. Don't double up.
+- **`obsidian-vault` skill vs proactive Obsidian saving rule below** — the skill only fires when user explicitly says "Obsidian" / "옵시디언" / "노트" / "note". Generic "save this" / "이거 저장해" is ambiguous (handoff? file? Obsidian?) → ask which destination before acting. The proactive rule below is for moments where I notice something worth capturing without being asked.
 
 ## Per-repo behavior
 
