@@ -1,0 +1,39 @@
+{
+  "name": "agcoco",
+  "owner": {
+    "name": "Minseok Kim",
+    "email": "bradykim777@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "engineering-skills",
+      "source": "./plugins/engineering-skills",
+      "description": "엔지니어링 스킬 모음 — diagnose, tdd, triage, to-prd, to-issues, zoom-out, prototype 등"
+    },
+    {
+      "name": "workflow",
+      "source": "./plugins/workflow",
+      "description": "핵심 작업 커맨드 — workcheck, workfinish, debug, research, handoff, resume-handoff"
+    },
+    {
+      "name": "planning",
+      "source": "./plugins/planning",
+      "description": "계획 라이프사이클 — create-plan, implement-plan, iterate-plan, validate-plan"
+    },
+    {
+      "name": "testing",
+      "source": "./plugins/testing",
+      "description": "테스트 & 비교 — affected-endpoints, branch-diff, smoke-test, test-affected"
+    },
+    {
+      "name": "git-tools",
+      "source": "./plugins/git-tools",
+      "description": "커밋 & PR 도구 — commit-mailplug, commit-suggest, pr-description + git 안전 가드"
+    },
+    {
+      "name": "claude-usage",
+      "source": "./plugins/claude-usage",
+      "description": "Claude Code 사용량 분석 — collect, analyze, report"
+    }
+  ]
+}
