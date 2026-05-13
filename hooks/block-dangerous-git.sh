@@ -12,6 +12,16 @@ block() {
   exit 2
 }
 
+# ─── GIT: commit & push (always require human) ───────────────────────────────
+
+if echo "$COMMAND" | grep -qE 'git[[:space:]]+commit([[:space:]]|$)'; then
+  block "git commit is reserved for the user. Stage changes and let the user commit manually."
+fi
+
+if echo "$COMMAND" | grep -qE 'git[[:space:]]+push([[:space:]]|$)'; then
+  block "git push is reserved for the user. Run manually when ready."
+fi
+
 # ─── GIT: force push ──────────────────────────────────────────────────────────
 
 # Force push to main/master
