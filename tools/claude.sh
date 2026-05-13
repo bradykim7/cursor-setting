@@ -11,5 +11,6 @@ TOOL_SYMLINKS=(
     "commands=commands"
     "agents=agents/claude-code"
     "skills=skills"
+    "hooks=hooks"
     "settings.json=settings.json"
 )
