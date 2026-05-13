@@ -4,7 +4,6 @@
     "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
     "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1"
   },
-  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -31,6 +30,17 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/obsidian-save-reminder.sh"
+          }
+        ]
+      }
     ]
   },
   "enabledPlugins": {
@@ -38,5 +48,6 @@
     "claude-md-management@claude-plugins-official": true
   },
   "effortLevel": "xhigh",
-  "theme": "light-daltonized"
+  "theme": "light-daltonized",
+  "skipDangerousModePermissionPrompt": true
 }

@@ -68,6 +68,25 @@ Keep it tight — it's always in context.
 - **In `agcoco/`**: read `WORKFLOW.md` upfront before suggesting workflow changes — it's the source of truth for commands/agents/skills inventory.
 - **In a fresh project (no `AGENTS.md`/`CLAUDE.md` with `## Agent skills` block)**: suggest running `setup-matt-pocock-skills` skill first to bootstrap context for `tdd`, `triage`, `to-prd`, `to-issues`, `diagnose`, etc.
 
+## Proactive Obsidian saving
+
+Vault: `~/Obsidian/`
+
+**When to proactively offer to write a note** (don't wait to be asked):
+- Learned a new tool, CLI feature, or platform capability (e.g., Claude Code plugin system)
+- Made or discovered an architecture/design decision
+- Found a non-obvious pattern, gotcha, or workaround
+- Solved a tricky problem with a generalizable lesson
+
+**Which folder:**
+- General tech knowledge → `30-Development/`
+- Company/team-specific → `20-Company/`
+- Unsure → `00-Inbox/`
+
+**Format:** kebab-case filename, frontmatter with `type`, `date`, `tags`. See `obsidian-vault` skill for full conventions.
+
+**Don't write** for: trivial tasks, one-off fixes, things already in the codebase.
+
 ## Anti-patterns to avoid
 
 - Don't spawn agents for trivial work (single file read, simple grep) — call the tool directly.
