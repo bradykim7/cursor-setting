@@ -5,6 +5,10 @@
 
 Personal dotfiles repo for AI agent-assisted coding. Manages custom slash commands, sub-agents, skills, and per-tool symlinks for any CLI that follows the `AGENTS.md` convention (Claude Code, Codex, and easily extensible to Gemini / Cursor / Aider / Continue via `tools/<name>.sh`).
 
+## Architecture
+
+![agcoco architecture](./architecture.png)
+
 ## Quick Start
 
 ```bash
