@@ -41,27 +41,98 @@ Keep it tight — it's always in context.
 
 **Default precedence**: if user invokes a command, run it. Otherwise check if a skill should auto-fire. Use agents only for delegation inside commands.
 
-## Skill trigger map (auto-fire on these phrases)
+## Intent routing — natural phrasing → action
 
-| User says… | Fires |
-|------------|-------|
-| "grill me" / "interview me on this plan" | `grill-me` |
-| "zoom out" / "bigger picture" / "context for this" | `zoom-out` |
-| "diagnose this" / "this is broken/throwing" / "perf regression" | `diagnose` |
-| "let's TDD" / "red-green-refactor" | `tdd` |
-| "prototype this" / "try a few UI variations" | `prototype` |
-| "find refactoring opportunities" / "improve architecture" | `improve-codebase-architecture` |
-| "turn this conversation into a PRD" | `to-prd` |
-| "break this plan into issues" | `to-issues` |
-| "triage these issues" | `triage` |
-| "set up pre-commit hooks" / "Husky + lint-staged" | `setup-pre-commit` |
-| "block dangerous git commands" | `git-guardrails-claude-code` |
+User does not memorize slash names. When their words match an intent below, **act on it without being told**. Match phrases in either Korean or English.
+
+**Confidence model:**
+- **(A) Auto-fire** — read-only or unambiguous. Just run it.
+- **(S) Suggest+confirm** — modifies files, high-blast-radius, or ambiguous. Ask first: "Looks like you want `X` — run it?"
+
+Type legend: **(cmd)** slash command · **(skill)** auto-firing skill · **(agent)** internal subagent I spawn.
+
+### Planning lifecycle
+- `/create-plan` (cmd, S) — "plan this", "let's design X", "구현 계획 짜자", "설계해보자"
+- `/iterate-plan` (cmd, S) — "update the plan", "계획 수정", "이 피드백 반영해서 계획 다시"
+- `/implement-plan` (cmd, S) — "implement phase by phase", "Phase 1부터 시작", "계획대로 구현"
+- `/validate-plan` (cmd, A) — "did we hit the goals", "계획 검증", "성공 기준 확인"
+- `to-prd` (skill, A) — "turn this into a PRD", "PRD로 정리"
+- `to-issues` (skill, A) — "break into issues", "이슈로 나눠줘"
+- `grill-me` (skill, A) — "grill me on this", "interview me", "이 계획 그릴해줘"
+- `grill-with-docs` (skill, A) — "stress-test against docs", "도메인 모델로 검증"
+- `triage` (skill, A) — "triage these issues", "이슈 분류"
+
+### Research, debug, understanding
+- `/research` (cmd, A) — "research X", "코드베이스 조사", "어떻게 동작하는지 정리"
+- `/debug` (cmd, A) — "broad investigation", "원인 모르겠어 다 봐줘", "병렬 조사"
+- `diagnose` (skill, A) — "this is broken/throwing", "에러 난다", "diagnose this", "perf regression"
+- `zoom-out` (skill, S — manual-only) — "zoom out", "큰 그림", "bigger picture" *(can't auto-fire — must suggest)*
+- `codebase-locator` (agent, A) — "where does X live", "이 코드 어디 있어"
+- `codebase-analyzer` (agent, A) — "how does X work", "이 로직 분석해줘"
+- `codebase-pattern-finder` (agent, A) — "how is X done elsewhere", "비슷한 패턴 있어"
+
+### TDD, prototype, refactor
+- `tdd` (skill, A) — "let's TDD", "red-green-refactor", "테스트부터 짜자"
+- `prototype` (skill, A) — "prototype this", "프로토타입", "try a few UI variations"
+- `improve-codebase-architecture` (skill, A) — "find refactoring opportunities", "improve architecture", "리팩토링 거리 찾아줘"
+- `architecture-review` (agent, A) — "review this architecture", "설계 검토", "design risks?"
+
+### Test
+- `/workcheck` (cmd, A) — "work check", "중간 점검", "지금까지 한 거 점검"
+- `/affected-endpoints` (cmd, A) — "what's affected by this change", "이 변경 어디 영향"
+- `/smoke-test` (cmd, A) — "smoke test", "엔드포인트 테스트"
+- `/test-affected` (cmd, A) — "test what's affected", "영향받은 곳 테스트"
+- `/branch-diff` (cmd, A) — "compare branches", "브랜치 비교"
+
+### Commit & PR
+- `/commit-suggest` (cmd, A) — "suggest commit message", "커밋 메시지 추천", "커밋 메시지 뭐로 할까"
+- `/commit-mailplug` (cmd, A) — same intent in team Mailplug repos (TKT-XXX convention, mostly KR)
+- `/pr-description` (cmd, A) — "PR description", "PR 설명 만들어줘"
+- `/workfinish` (cmd, S) — "wrap up", "마무리하자", "ready to ship", "끝내자"
+- `pr-review-assistant` (agent, A) — "review this PR", "PR 리뷰", "find risks in my changes"
+
+### Session
+- `/handoff` (cmd, A) — "handoff this session", "인수인계 문서 만들어", "save context"
+- `/resume-handoff` (cmd, A) — "resume", "이어서 작업", "pick up where I left off"
+
+### Claude usage
+- `/claude-usage-collect` (cmd, A) — "collect my usage", "내 사용량 추출"
+- `/claude-usage-analyze` (cmd, A) — "analyze my usage", "내 사용 분석", "ROI 리포트"
+- `/claude-usage-report` (cmd, A) — "team usage report", "팀 사용 리포트"
+
+### Setup
+- `setup-matt-pocock-skills` (skill, S — manual-only) — "set up engineering skills", "이 프로젝트 셋업" *(can't auto-fire — must suggest)*
+- `setup-pre-commit` (skill, A) — "pre-commit hooks", "Husky 셋업", "lint-staged"
+- `git-guardrails-claude-code` (skill, A) — "block dangerous git", "위험한 git 막아줘"
+
+### Personal & writing
+- `obsidian-vault` (skill, A) — "save to Obsidian", "노트로 저장", "find a note"
+- `edit-article` (skill, A) — "edit this article", "글 다듬어줘"
+- `writing-fragments` (skill, A) — "ideate", "fragments", "raw material"
+- `writing-shape` (skill, A) — "shape these notes into article"
+- `writing-beats` (skill, A) — "narrative beats", "as a journey/story"
+
+### Productivity & misc
+- `caveman` (skill, A) — "be brief", "caveman mode", "토큰 아껴"
+- `write-a-skill` (skill, A) — "create a new skill", "새 스킬 만들어줘"
+- `scaffold-exercises` (skill, A) — "scaffold exercises"
+- `migrate-to-shoehorn` (skill, A) — "migrate `as` to shoehorn"
+
+### Doc analysis
+- `document-summarizer` (agent, A) — "summarize this doc", "이 문서 요약", "extract action items"
+- `docs-locator` (agent, A) — "find past plans/handoffs", "이전 핸드오프 찾아줘"
+- `docs-analyzer` (agent, A) — "extract insights from this past doc"
+- `consistency-check` (agent, A) — "compare these two datasets", "데이터 비교"
+- `endpoint-analysis` (agent, A) — "analyze this endpoint", "API 분석"
 
 ## Overlap rules (use this, not that)
 
-- **`/debug` vs `diagnose`** — `/debug` for broad parallel investigation when the bug is unknown. `diagnose` (skill) for hard-to-reproduce bugs needing strict reproduce → minimize → instrument loop. If user names the symptom but not cause, lean `/debug`. If they say "diagnose this", lean `diagnose`.
-- **`/handoff` (command) only** — there is no `handoff` skill (deleted as duplicate). Always use `/handoff` and pair with `/resume-handoff`.
-- **`/create-plan` vs `grill-with-docs` + `to-prd` + `to-issues`** — `/create-plan` is one-shot and faster. The skill chain is incremental and produces persistent artifacts (PRDs + issues). Pick by user signal: ad-hoc planning → command; formal scoping → skill chain.
+- **`/debug` vs `diagnose`** — `/debug` for broad parallel investigation when the bug is unknown. `diagnose` (skill) for hard-to-reproduce bugs needing reproduce → minimize → instrument loop. If user names the symptom but not the cause, lean `/debug`. If they say "diagnose this", lean `diagnose`.
+- **`/commit-suggest` vs `/commit-mailplug`** — `/commit-mailplug` if repo follows team ticket convention (TKT-XXX) or commits are mostly Korean. Otherwise `/commit-suggest`. When unclear, ask once.
+- **`/handoff` (command) only** — there is no `handoff` skill (deleted as duplicate). Always use `/handoff`, paired with `/resume-handoff`.
+- **`/create-plan` vs `grill-with-docs` + `to-prd` + `to-issues`** — `/create-plan` is one-shot and faster. The skill chain is incremental and produces persistent artifacts (PRDs + issues). Ad-hoc planning → command; formal scoping → skill chain.
+- **`/workfinish` vs piecewise `/commit-suggest` + `/pr-description`** — `/workfinish` runs both. Use it on "wrap up" / "마무리". Use the individual commands when user asks for just one.
+- **`obsidian-vault` skill vs proactive Obsidian saving rule below** — the skill is for explicit "save/find a note" requests. The proactive rule is for moments where I notice something worth capturing without being asked. Don't double up.
 
 ## Per-repo behavior
 
