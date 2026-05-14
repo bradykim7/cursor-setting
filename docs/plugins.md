@@ -1,6 +1,6 @@
 # Plugins
 
-Claude Code plugin marketplace bundles. Each subdirectory is a self-contained plugin: a `.claude-plugin/plugin.json` manifest plus `commands/` and/or `skills/` shipped together.
+Claude Code plugin marketplace bundles under [`plugins/`](../plugins/). Each subdirectory is a self-contained plugin: a `.claude-plugin/plugin.json` manifest plus `commands/` and/or `skills/` shipped together.
 
 These are consumed via the marketplace UI:
 
@@ -9,20 +9,20 @@ These are consumed via the marketplace UI:
 /plugin install <plugin-name>@agcoco
 ```
 
-The top-level [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json) advertises every plugin in this directory.
+The top-level [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json) advertises every plugin in the directory.
 
-> 한국어: [README.kr.md](./README.kr.md)
+> 한국어: [plugins.kr.md](./plugins.kr.md)
 
 ## Inventory
 
 | Plugin | Contents | Purpose |
 |--------|----------|---------|
-| [`planning`](./planning/) | commands | Plan lifecycle — `create-plan`, `implement-plan`, `iterate-plan`, `validate-plan` |
-| [`workflow`](./workflow/) | commands | Core meta commands — `workcheck`, `workfinish`, `debug`, `research`, `handoff`, `resume-handoff` |
-| [`testing`](./testing/) | commands | Test & compare — `affected-endpoints`, `branch-diff`, `smoke-test`, `test-affected` |
-| [`git-tools`](./git-tools/) | commands + skills | Commit & PR — `commit-mailplug`, `commit-suggest`, `pr-description` + `git-guardrails`, `setup-pre-commit` |
-| [`engineering-skills`](./engineering-skills/) | skills | Engineering workflow skills — `diagnose`, `tdd`, `triage`, `to-prd`, `to-issues`, `zoom-out`, `improve-codebase-architecture`, `prototype`, `grill-with-docs`, `grill-me` |
-| [`claude-usage`](./claude-usage/) | commands | Claude Code usage analytics — `claude-usage-collect`, `claude-usage-analyze`, `claude-usage-report` |
+| [`planning`](../plugins/planning/) | commands | Plan lifecycle — `create-plan`, `implement-plan`, `iterate-plan`, `validate-plan` |
+| [`workflow`](../plugins/workflow/) | commands | Core meta commands — `workcheck`, `workfinish`, `debug`, `research`, `handoff`, `resume-handoff` |
+| [`testing`](../plugins/testing/) | commands | Test & compare — `affected-endpoints`, `branch-diff`, `smoke-test`, `test-affected` |
+| [`git-tools`](../plugins/git-tools/) | commands + skills | Commit & PR — `commit-mailplug`, `commit-suggest`, `pr-description` + `git-guardrails`, `setup-pre-commit` |
+| [`engineering-skills`](../plugins/engineering-skills/) | skills | Engineering workflow skills — `diagnose`, `tdd`, `triage`, `to-prd`, `to-issues`, `zoom-out`, `improve-codebase-architecture`, `prototype`, `grill-with-docs`, `grill-me` |
+| [`claude-usage`](../plugins/claude-usage/) | commands | Claude Code usage analytics — `claude-usage-collect`, `claude-usage-analyze`, `claude-usage-report` |
 
 ## Plugin vs. personal-install
 

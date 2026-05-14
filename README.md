@@ -131,6 +131,16 @@ Creates a vault with:
 
 ## Docs
 
+> 한국어: [README.kr.md](./README.kr.md)
+
+### Component reference
+- [Slash Commands](docs/commands.md) ([🇰🇷](docs/commands.kr.md)) — 21 commands grouped by category
+- [Sub-agents](docs/agents.md) ([🇰🇷](docs/agents.kr.md)) — 12 specialized agents Claude spawns
+- [Hooks](docs/hooks.md) ([🇰🇷](docs/hooks.kr.md)) — 4 lifecycle hook scripts
+- [Scripts](docs/scripts.md) ([🇰🇷](docs/scripts.kr.md)) — Standalone shell helpers
+- [Plugins](docs/plugins.md) ([🇰🇷](docs/plugins.kr.md)) — 6 plugin marketplace bundles
+
+### Guides
 - [Onboarding Guide](docs/onboarding.md) — 처음 사용자를 위한 소개
 - [Obsidian Onboarding](docs/obsidian-onboarding.md) — Obsidian vault 단계별 셋업
 - [Workflow Reference](WORKFLOW.md) — 전체 커맨드 & 워크플로우 상세

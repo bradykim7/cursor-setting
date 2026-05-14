@@ -1,6 +1,6 @@
 # Hooks
 
-Bash scripts wired into Claude Code's hook system. Each script runs at a specific lifecycle moment and can:
+Bash scripts under [`hooks/`](../hooks/) wired into Claude Code's hook system. Each script runs at a specific lifecycle moment and can:
 
 - **block** an action (non-zero exit on a blocking hook),
 - **annotate** Claude's context (stdout on Stop / SessionStart hooks),
@@ -8,16 +8,16 @@ Bash scripts wired into Claude Code's hook system. Each script runs at a specifi
 
 Linked into `~/.claude/hooks/` by `install.sh`; the actual hook registration lives in `~/.claude/settings.json`.
 
-> 한국어: [README.kr.md](./README.kr.md)
+> 한국어: [hooks.kr.md](./hooks.kr.md)
 
 ## Inventory
 
 | Script | Event | Type | Purpose |
 |--------|-------|------|---------|
-| [`block-dangerous-git.sh`](./block-dangerous-git.sh) | PreToolUse: Bash | **Blocking** | Refuses `git commit`, `git push`, `git filter-repo`, `git reset --hard`, etc. — human approval required |
-| [`workcheck-reminder.sh`](./workcheck-reminder.sh) | PreToolUse: Bash | Warning (non-blocking) | Before `git commit`, warns if no smoke-test report exists for the current ticket — operator can run `/workcheck` or proceed |
-| [`session-start-ticket-context.sh`](./session-start-ticket-context.sh) | SessionStart | Annotates context | When branch matches a Jira-style ticket pattern, surfaces related `.plans/`, `.handoffs/`, `.research/`, `testjob/<ticket>/` artifacts |
-| [`obsidian-save-reminder.sh`](./obsidian-save-reminder.sh) | Stop | Annotates context | After Claude finishes responding, hints to consider saving significant learnings to the Obsidian vault |
+| [`block-dangerous-git.sh`](../hooks/block-dangerous-git.sh) | PreToolUse: Bash | **Blocking** | Refuses `git commit`, `git push`, `git filter-repo`, `git reset --hard`, etc. — human approval required |
+| [`workcheck-reminder.sh`](../hooks/workcheck-reminder.sh) | PreToolUse: Bash | Warning (non-blocking) | Before `git commit`, warns if no smoke-test report exists for the current ticket — operator can run `/workcheck` or proceed |
+| [`session-start-ticket-context.sh`](../hooks/session-start-ticket-context.sh) | SessionStart | Annotates context | When branch matches a Jira-style ticket pattern, surfaces related `.plans/`, `.handoffs/`, `.research/`, `testjob/<ticket>/` artifacts |
+| [`obsidian-save-reminder.sh`](../hooks/obsidian-save-reminder.sh) | Stop | Annotates context | After Claude finishes responding, hints to consider saving significant learnings to the Obsidian vault |
 
 ## Hook event model (quick reference)
 
@@ -37,7 +37,7 @@ Linked into `~/.claude/hooks/` by `install.sh`; the actual hook registration liv
 
 ## Adding a new hook
 
-1. Drop `your-hook.sh` in this directory; `chmod +x`.
+1. Drop `your-hook.sh` in [`hooks/`](../hooks/); `chmod +x`.
 2. Re-run `./install.sh` to symlink to `~/.claude/hooks/`.
 3. Wire it up in `~/.claude/settings.json` under the matching event:
    ```json

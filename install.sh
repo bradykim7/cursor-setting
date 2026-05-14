@@ -307,37 +307,6 @@ install_tool() {
         target_rel="${entry%%=*}"
         source_rel="${entry#*=}"
         target_path="$TOOL_DIR/$target_rel"
-
-        # Glob 엔트리 (e.g., "commands=commands/*.md") — 매칭 파일만 개별 symlink, README*.md 제외
-        if [[ "$source_rel" == *"*"* ]]; then
-            # 기존 디렉토리 symlink 면 제거 후 실제 디렉토리로 재생성
-            if [ -L "$target_path" ]; then
-                rm "$target_path"
-            fi
-            mkdir -p "$target_path"
-
-            local source_file file_basename file_target found=0
-            for source_file in $DOTFILES_DIR/$source_rel; do
-                [ -e "$source_file" ] || continue
-                found=1
-                file_basename="$(basename "$source_file")"
-                case "$file_basename" in
-                    README.md|README.*.md) continue ;;
-                esac
-                file_target="$target_path/$file_basename"
-                if [ -e "$file_target" ] && [ ! -L "$file_target" ]; then
-                    mv "$file_target" "$file_target.bak"
-                elif [ -L "$file_target" ]; then
-                    rm "$file_target"
-                fi
-                ln -s "$source_file" "$file_target"
-                echo "    [✓] $file_target → $source_file"
-                INSTALLED_SYMLINKS+=("$file_target")
-            done
-            [ "$found" -eq 0 ] && echo "    [!] glob 매치 없음 — 스킵: $source_rel"
-            continue
-        fi
-
         source_path="$DOTFILES_DIR/$source_rel"
 
         if [ ! -e "$source_path" ]; then
