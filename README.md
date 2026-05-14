@@ -19,17 +19,125 @@ cd ~/agcoco
 ./install.sh
 ```
 
-## Layer 01 — Input
+## How it works
 
-![One config, many CLIs](./docs/images/agcoco-01-input.png)
+Three ways to fire a workflow — a slash command you type, a skill that auto-fires from your phrasing, or a sub-agent the running command spawns. The core agent loop reads context, plans, fans out to specialists, and folds findings back into a single answer.
 
-## Layer 02 — Router
+- **Commands** (`/foo`) — you invoke explicitly. Full workflows.
+- **Skills** — auto-fire when your phrasing matches the `description` field. No slash needed.
+- **Agents** — Claude spawns them automatically inside a command. Specialized single tasks.
 
-![Three ways to fire the loop](./docs/images/agcoco-02-router.png)
+<img src="./docs/images/agcoco-02-router.png" alt="Three ways to fire the loop" width="720">
 
-## Layer 03 — Integration
+<img src="./docs/images/agcoco-04-core.png" alt="The core agent loop" width="720">
 
-![One source, symlinked everywhere](./docs/images/agcoco-03-integration.png)
+## What's Included
+
+### Commands (21)
+
+| Category | Commands |
+|----------|----------|
+| **Plan Lifecycle** | `/create-plan`, `/implement-plan`, `/iterate-plan`, `/validate-plan` |
+| **Research & Debug** | `/research`, `/debug` |
+| **Session** | `/handoff`, `/resume-handoff` |
+| **Test** | `/workcheck`, `/affected-endpoints`, `/smoke-test`, `/branch-diff`, `/test-affected` |
+| **Commit & PR** | `/workfinish`, `/commit-mailplug`, `/commit-suggest`, `/pr-description` |
+| **Claude Usage** | `/claude-usage-collect`, `/claude-usage-analyze`, `/claude-usage-report` |
+| **Jira Automation** | `/jira-daily` (+ optional `scripts/jira-daily-setup.sh` for launchd cron) |
+
+<img src="./docs/images/agcoco-05-commands.png" alt="21 workflows behind a slash" width="720">
+
+### Agents (12)
+
+Commands trigger these automatically — you don't call them directly.
+
+| Agent | Role |
+|-------|------|
+| `codebase-analyzer` | Code implementation analysis |
+| `codebase-locator` | File/component location (Super Grep) |
+| `codebase-pattern-finder` | Find similar patterns + code examples |
+| `docs-locator` | Search past plans/research/handoffs |
+| `docs-analyzer` | Extract insights from past documents |
+| `web-search-researcher` | Web search for up-to-date info |
+| `architecture-review` | Architecture risk analysis |
+| `endpoint-analysis` | API endpoint behavior analysis |
+| `pr-review-assistant` | PR risk-focused review |
+| `consistency-check` | Data snapshot comparison |
+| `document-summarizer` | Document summarization |
+| `pr-description-generator` | PR description generation |
+
+<img src="./docs/images/agcoco-06-agents.png" alt="12 specialists on Sonnet" width="720">
+
+### Skills (22)
+
+Ported from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). Skills auto-fire when your phrasing matches their `description` field — no slash command needed.
+
+| Category | Skill | Triggers when you say… |
+|----------|-------|------------------------|
+| **engineering** | `setup-matt-pocock-skills` | "set up the engineering skills for this repo" — run first in any new project |
+| | `grill-with-docs` | "stress-test this plan against our domain model" |
+| | `to-prd` | "turn this conversation into a PRD" |
+| | `to-issues` | "break this plan into issues" |
+| | `triage` | "triage these incoming issues" |
+| | `tdd` | "let's TDD this", "red-green-refactor" |
+| | `diagnose` | "diagnose this bug", "this is broken/throwing/failing" |
+| | `improve-codebase-architecture` | "find refactoring opportunities", "improve architecture" |
+| | `prototype` | "let me prototype this", "try a few UI variations" |
+| | `zoom-out` | "zoom out", "give me the bigger picture" |
+| **productivity** | `grill-me` | "grill me on this plan", "interview me" |
+| | `caveman` | (terse output mode) |
+| | `write-a-skill` | "create a new skill" |
+| **misc** | `git-guardrails-claude-code` | "block dangerous git commands", "add git safety hooks" |
+| | `setup-pre-commit` | "set up pre-commit hooks", "add Husky + lint-staged" |
+| | `migrate-to-shoehorn` | "replace `as` with shoehorn in tests" |
+| | `scaffold-exercises` | "scaffold an exercise structure" |
+| **personal** | `edit-article` | "edit/revise this article" |
+| | `obsidian-vault` | "find/create a note in Obsidian" |
+| **in-progress** | `writing-fragments` | "ideate", "fragments", "raw material" |
+| | `writing-shape` | "shape these notes into an article" |
+| | `writing-beats` | "assemble this as a narrative" |
+
+<img src="./docs/images/agcoco-07-skills.png" alt="22 habits, autoloaded" width="720">
+
+### Plugins (6)
+
+Commands and skills also ship as installable plugin packs in `plugins/`. Cherry-pick a pack — you don't have to adopt the whole config.
+
+```bash
+/plugin marketplace add mskim/Agcoco
+/plugin install engineering-skills@agcoco
+/plugin install workflow@agcoco
+```
+
+<img src="./docs/images/agcoco-08-plugins.png" alt="6 marketplace bundles" width="720">
+
+### Hooks (4)
+
+Non-LLM scripts that run on tool invocation or session events. The agent doesn't choose to honour them — the runtime enforces them.
+
+| Hook | Event | Purpose |
+|------|-------|---------|
+| `block-dangerous-git.sh` | PreToolUse: Bash | Block `git commit/push/filter-repo/reset --hard` — require human approval |
+| `workcheck-reminder.sh` | PreToolUse: Bash | Warn before commit if no smoke test report exists |
+| `session-start-ticket-context.sh` | SessionStart | Auto-load `.plans/`, `.handoffs/`, `.research/` for JIRA ticket branches |
+| `obsidian-save-reminder.sh` | Stop | Nudge to save learnings to the Obsidian vault |
+
+<img src="./docs/images/agcoco-11-hooks.png" alt="4 guardrails the agent can't dodge" width="720">
+
+## Multi-Tool Support (`tools/` registry)
+
+Tool-agnostic — `install.sh` runs a generic loop over `tools/*.sh`, auto-detects whatever CLIs are installed, and creates the declared symlinks. `AGENTS.md` is the **canonical** agent context (openclaw pattern); each tool's expected memory filename is a symlink to it.
+
+<img src="./docs/images/agcoco-01-input.png" alt="One config, many CLIs" width="720">
+
+**Shipped (verified):**
+
+| File | Tool | Detection | Symlinks created |
+|---|---|---|---|
+| `tools/claude.sh` | Claude Code | `command -v claude` | `~/.claude/CLAUDE.md` → `AGENTS.md`, `commands`, `agents`, `skills`, `settings.json` |
+| `tools/codex.sh` | Codex CLI | `command -v codex` | `~/.codex/AGENTS.md` → `AGENTS.md`, `skills` (same SKILL.md format) |
+
+<img src="./docs/images/agcoco-03-integration.png" alt="One source, symlinked everywhere" width="720">
 
 **Add any other tool** — Gemini, Cursor agent, Aider, Continue, etc:
 
@@ -41,39 +149,11 @@ $EDITOR tools/<your-tool>.sh    # fill in 4 vars: TOOL_NAME, TOOL_CMD, TOOL_DIR,
 
 `_template.sh` has commented-out example definitions for Gemini, Cursor, Aider, and Continue. See `tools/README.md` for the convention details. Tools whose CLI isn't installed are listed under the "skipped tools" section and skipped silently.
 
-## Layer 04 — Core
+## Memory & State
 
-![The agent loop](./docs/images/agcoco-04-core.png)
+Plain Markdown on disk is the memory. Plans, research notes, and handoffs all live as files the agent can read on the next session, on the next branch, or from a different machine — context survives the chat window.
 
-## Layer 05 — Commands
-
-![Twenty-one workflows behind a slash](./docs/images/agcoco-05-commands.png)
-
-## Layer 06 — Agents
-
-![Twelve specialists on Sonnet](./docs/images/agcoco-06-agents.png)
-
-## Layer 07 — Skills
-
-![Twenty-two habits, autoloaded](./docs/images/agcoco-07-skills.png)
-
-Ported from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). Skills auto-fire when your phrasing matches their `description` field — no slash command needed.
-
-## Layer 08 — Plugins
-
-![Six marketplace bundles](./docs/images/agcoco-08-plugins.png)
-
-Install bundles via the plugin marketplace:
-
-```bash
-/plugin marketplace add mskim/Agcoco
-/plugin install engineering-skills@agcoco
-/plugin install workflow@agcoco
-```
-
-## Layer 09 — Memory
-
-![Markdown on disk is the memory](./docs/images/agcoco-09-memory.png)
+<img src="./docs/images/agcoco-09-memory.png" alt="Markdown on disk is the memory" width="720">
 
 ### Project Init
 
@@ -99,13 +179,11 @@ Creates a vault with:
 
 → Follow the [Obsidian Onboarding Guide](docs/obsidian-onboarding.md) (10 minutes)
 
-## Layer 10 — Output
+## Output
 
-![What lands in your repo](./docs/images/agcoco-10-output.png)
+Every workflow produces a concrete file or message — not just a chat reply. Commit messages follow team convention, PR descriptions write themselves, test reports get checked in for the next session to read.
 
-## Layer 11 — Hooks
-
-![Four guardrails the agent can't dodge](./docs/images/agcoco-11-hooks.png)
+<img src="./docs/images/agcoco-10-output.png" alt="What lands in your repo" width="720">
 
 ## Docs
 
