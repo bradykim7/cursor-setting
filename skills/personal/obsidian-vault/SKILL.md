@@ -7,7 +7,7 @@ description: Search, create, and manage notes in the Obsidian vault. Use when us
 
 ## Vault location
 
-`~/Obsidian/`
+`${OBSIDIAN_VAULT:-$HOME/Obsidian}` — set `OBSIDIAN_VAULT` env var in your shell to override the default.
 
 ## Folder structure
 
@@ -57,11 +57,13 @@ tags:
 ### Search for notes
 
 ```bash
+VAULT="${OBSIDIAN_VAULT:-$HOME/Obsidian}"
+
 # By filename
-find "~/Obsidian" -name "*.md" | grep -i "keyword"
+find "$VAULT" -name "*.md" | grep -i "keyword"
 
 # By content
-grep -rl "keyword" "~/Obsidian" --include="*.md"
+grep -rl "keyword" "$VAULT" --include="*.md"
 ```
 
 ### Create a new note

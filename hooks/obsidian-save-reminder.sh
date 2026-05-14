@@ -3,7 +3,7 @@
 # significant learnings to the Obsidian vault.
 # stdout is appended to Claude's context; Claude decides whether to act.
 
-VAULT="~/Obsidian"
+VAULT="${OBSIDIAN_VAULT:-$HOME/Obsidian}"
 
 # Only fire if vault exists (guards against machines without the vault)
 [ -d "$VAULT" ] || exit 0

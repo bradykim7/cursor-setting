@@ -146,7 +146,7 @@ Type legend: **(cmd)** slash command · **(skill)** auto-firing skill · **(agen
 
 ## Proactive Obsidian saving
 
-Vault: `~/Obsidian/`
+Vault: `$OBSIDIAN_VAULT` (default `$HOME/Obsidian`) — set the env var in your shell config to override.
 
 **When to proactively offer to write a note** (don't wait to be asked):
 - Learned a new tool, CLI feature, or platform capability (e.g., Claude Code plugin system)
