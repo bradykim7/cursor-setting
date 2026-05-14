@@ -1,9 +1,11 @@
 # agcoco
 
 > **agcoco** = **Ag**ent-**Co**ding-**Co**nfig — pronounced "AG-co-co".
-> AI 에이전트 코딩을 위한 개인 dotfiles 레포 (Claude Code, Codex 등 멀티툴 지원).
+> Personal dotfiles repo for AI agent-assisted coding.
 
-Personal dotfiles repo for AI agent-assisted coding. Manages custom slash commands, sub-agents, skills, and per-tool symlinks for any CLI that follows the `AGENTS.md` convention (Claude Code, Codex, and easily extensible to Gemini / Cursor / Aider / Continue via `tools/<name>.sh`).
+Manages custom slash commands, sub-agents, skills, and per-tool symlinks for any CLI that follows the `AGENTS.md` convention (Claude Code, Codex, and easily extensible to Gemini / Cursor / Aider / Continue via `tools/<name>.sh`).
+
+> Korean / 한국어: [README.kr.md](./README.kr.md)
 
 ## Architecture
 
@@ -19,7 +21,7 @@ cd ~/agcoco
 
 ## What's Included
 
-### Commands (21개)
+### Commands (21)
 
 | Category | Commands |
 |----------|----------|
@@ -31,7 +33,7 @@ cd ~/agcoco
 | **Claude Usage** | `/claude-usage-collect`, `/claude-usage-analyze`, `/claude-usage-report` |
 | **Jira Automation** | `/jira-daily` (+ optional `scripts/jira-daily-setup.sh` for launchd cron) |
 
-### Agents (12개)
+### Agents (12)
 
 Commands trigger these automatically — you don't call them directly.
 
@@ -50,7 +52,7 @@ Commands trigger these automatically — you don't call them directly.
 | `document-summarizer` | Document summarization |
 | `pr-description-generator` | PR description generation |
 
-### Skills (22개)
+### Skills (22)
 
 Ported from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). Skills auto-fire when your phrasing matches their `description` field — no slash command needed.
 
@@ -103,7 +105,7 @@ $EDITOR tools/<your-tool>.sh    # fill in 4 vars: TOOL_NAME, TOOL_CMD, TOOL_DIR,
 ./install.sh                    # auto-detected from the next run on
 ```
 
-`_template.sh` has commented-out example definitions for Gemini, Cursor, Aider, and Continue. See `tools/README.md` for the convention details. Tools whose CLI isn't installed are listed under "건너뛴 툴" and skipped silently.
+`_template.sh` has commented-out example definitions for Gemini, Cursor, Aider, and Continue. See `tools/README.md` for the convention details. Tools whose CLI isn't installed are listed under the "skipped tools" section and skipped silently.
 
 ## Project Init
 
@@ -115,36 +117,34 @@ Creates `CLAUDE.md` + `.handoffs/` + `.plans/` + `.research/` in the target proj
 
 ## Obsidian Vault Init
 
-회사 지식 + 개발 지식 축적용 Obsidian vault를 부트스트랩합니다.
+Bootstraps an Obsidian vault for accumulating company knowledge + development knowledge.
 
 ```bash
 ./install.sh obsidian-init ~/Documents/MyVault
 ```
 
 Creates a vault with:
-- 폴더 구조 (`20-Company/` 회사 지식, `30-Development/` 개발 지식 분리)
-- 7가지 노트 템플릿 (데일리·미팅·ADR·기술 지식·트러블슈팅·용어집·주간 회고)
-- Claude Code 연동 (`CLAUDE.md` + `.claude/commands/` 슬래시 커맨드 3종)
-- Obsidian 코어 플러그인 자동 설정
+- Folder structure (`20-Company/` for company knowledge, `30-Development/` for general dev knowledge — kept separate)
+- 7 note templates (daily, meeting, ADR, tech knowledge, troubleshooting, glossary, weekly review)
+- Claude Code integration (`CLAUDE.md` + `.claude/commands/` with 3 slash commands)
+- Auto-configured Obsidian core plugins
 
-→ [Obsidian Onboarding Guide](docs/obsidian-onboarding.md) 따라하기 (10분)
+→ Follow the [Obsidian Onboarding Guide](docs/obsidian-onboarding.md) (10 minutes)
 
 ## Docs
 
-> 한국어: [README.kr.md](./README.kr.md)
-
 ### Component reference
-- [Slash Commands](docs/commands.md) ([🇰🇷](docs/commands.kr.md)) — 21 commands grouped by category
-- [Sub-agents](docs/agents.md) ([🇰🇷](docs/agents.kr.md)) — 12 specialized agents Claude spawns
-- [Hooks](docs/hooks.md) ([🇰🇷](docs/hooks.kr.md)) — 4 lifecycle hook scripts
-- [Scripts](docs/scripts.md) ([🇰🇷](docs/scripts.kr.md)) — Standalone shell helpers
-- [Plugins](docs/plugins.md) ([🇰🇷](docs/plugins.kr.md)) — 6 plugin marketplace bundles
+- [Slash Commands](docs/commands.en.md) ([KR](docs/commands.kr.md)) — 21 commands grouped by category
+- [Sub-agents](docs/agents.en.md) ([KR](docs/agents.kr.md)) — 12 specialized agents Claude spawns
+- [Hooks](docs/hooks.en.md) ([KR](docs/hooks.kr.md)) — 4 lifecycle hook scripts
+- [Scripts](docs/scripts.en.md) ([KR](docs/scripts.kr.md)) — Standalone shell helpers
+- [Plugins](docs/plugins.en.md) ([KR](docs/plugins.kr.md)) — 6 plugin marketplace bundles
 
 ### Guides
-- [Onboarding Guide](docs/onboarding.md) — 처음 사용자를 위한 소개
-- [Obsidian Onboarding](docs/obsidian-onboarding.md) — Obsidian vault 단계별 셋업
-- [Workflow Reference](WORKFLOW.md) — 전체 커맨드 & 워크플로우 상세
-- [Submodule Approach](docs/approach-a-submodule.md) — 팀 공유 시 대안 구조
+- [Onboarding Guide](docs/onboarding.md) — Intro for first-time users
+- [Obsidian Onboarding](docs/obsidian-onboarding.md) — Step-by-step Obsidian vault setup
+- [Workflow Reference](WORKFLOW.md) — Full command & workflow reference
+- [Submodule Approach](docs/approach-a-submodule.md) — Alternative structure for team sharing
 
 ## Inspired by
 

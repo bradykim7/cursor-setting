@@ -8,7 +8,7 @@
 
 `install.sh` 가 `~/.claude/hooks/` 로 심링크합니다. 실제 hook 등록은 `~/.claude/settings.json` 에 존재.
 
-> English: [hooks.md](./hooks.md)
+> English: [hooks.en.md](./hooks.en.md)
 
 ## 목록
 

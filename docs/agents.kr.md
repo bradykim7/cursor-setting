@@ -4,7 +4,7 @@ Claude Code 가 `Agent` 도구로 호출하는 전문 에이전트. [`agents/cla
 
 사용자가 직접 부르는 것이 아니라, 작업이 해당 에이전트의 `description` 과 매치되면 Claude 가 선택합니다 — description 이 곧 라우터.
 
-> English: [agents.md](./agents.md)
+> English: [agents.en.md](./agents.en.md)
 
 ## 목록
 

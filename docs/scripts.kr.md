@@ -2,7 +2,7 @@
 
 [`scripts/`](../scripts/) 의 독립 실행 셸 헬퍼 — 인스톨러, 셋업 유틸, 일회성 자동화. `hooks/` (Claude Code 가 자동 호출) 와 `commands/` (`/<이름>` 으로 호출) 와 달리, 이 디렉터리의 스크립트는 사용자가 터미널에서 직접 실행합니다.
 
-> English: [scripts.md](./scripts.md)
+> English: [scripts.en.md](./scripts.en.md)
 
 ## 목록
 

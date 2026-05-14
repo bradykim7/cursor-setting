@@ -138,11 +138,11 @@ $EDITOR tools/<your-tool>.sh    # 4개 변수 입력: TOOL_NAME, TOOL_CMD, TOOL_
 ## 문서
 
 ### 컴포넌트 레퍼런스
-- [슬래시 커맨드](docs/commands.kr.md) ([🇬🇧](docs/commands.md)) — 카테고리별 21개 커맨드
-- [서브 에이전트](docs/agents.kr.md) ([🇬🇧](docs/agents.md)) — Claude 가 spawn 하는 12개 전문 에이전트
-- [Hooks](docs/hooks.kr.md) ([🇬🇧](docs/hooks.md)) — 4개 라이프사이클 hook 스크립트
-- [Scripts](docs/scripts.kr.md) ([🇬🇧](docs/scripts.md)) — 독립 실행 셸 헬퍼
-- [Plugins](docs/plugins.kr.md) ([🇬🇧](docs/plugins.md)) — 6개 플러그인 마켓플레이스 번들
+- [슬래시 커맨드](docs/commands.kr.md) ([EN](docs/commands.en.md)) — 카테고리별 21개 커맨드
+- [서브 에이전트](docs/agents.kr.md) ([EN](docs/agents.en.md)) — Claude 가 spawn 하는 12개 전문 에이전트
+- [Hooks](docs/hooks.kr.md) ([EN](docs/hooks.en.md)) — 4개 라이프사이클 hook 스크립트
+- [Scripts](docs/scripts.kr.md) ([EN](docs/scripts.en.md)) — 독립 실행 셸 헬퍼
+- [Plugins](docs/plugins.kr.md) ([EN](docs/plugins.en.md)) — 6개 플러그인 마켓플레이스 번들
 
 ### 가이드
 - [Onboarding Guide](docs/onboarding.md) — 처음 사용자를 위한 소개

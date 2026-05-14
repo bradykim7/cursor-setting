@@ -11,7 +11,7 @@
 
 최상위 [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json) 이 디렉터리의 모든 플러그인을 광고합니다.
 
-> English: [plugins.md](./plugins.md)
+> English: [plugins.en.md](./plugins.en.md)
 
 ## 목록
 
