@@ -119,6 +119,7 @@ Type legend: **(cmd)** slash command · **(skill)** auto-firing skill · **(agen
 - `migrate-to-shoehorn` (skill, A) — "migrate `as` to shoehorn"
 
 ### Doc analysis
+- `web-search-researcher` (agent, A) — "웹 검색해줘", "최신 문서 찾아봐", "search the web for X", "stack overflow에서 찾아봐", "find docs online"
 - `document-summarizer` (agent, A) — "summarize this doc", "이 문서 요약", "extract action items"
 - `docs-locator` (agent, A) — "find past plans/handoffs", "이전 핸드오프 찾아줘"
 - `docs-analyzer` (agent, A) — "extract insights from this past doc"
@@ -209,3 +210,19 @@ For multi-step tasks, state a brief plan:
 1. [Step] → verify: [check]
 2. [Step] → verify: [check]
 ```
+
+## Coding principles (laws to lean on)
+
+Curated from [Laws of Software Engineering](https://lawsofsoftwareengineering.com/). Skips the ~20 organizational laws (Brooks, Conway, Peter Principle, etc.) and the ~10 already covered above (YAGNI, KISS, premature optimization, premature DRY, Boy Scout Rule, Least Astonishment). Apply when the situation calls for it — **don't recite, don't over-apply**.
+
+- **Hyrum's Law** — any observable behavior of a sufficiently-used API becomes a contract. When changing return shapes, error messages, ordering, or timing, assume callers depend on it. Grep for callers before "fixing" odd-looking behavior.
+- **Postel's Law** — strict in output, liberal in input. **Apply at system boundaries only** (user input, external APIs, parsing). Inside trusted internal code, validate strictly — don't paper over bugs.
+- **Law of Leaky Abstractions** — non-trivial abstractions leak. Don't wrap something just to hide it; the caller will eventually need the underlying detail. Wrap only to *remove* complexity, not to disguise it.
+- **Law of Demeter** — don't reach through chains (`a.b.c.d.method()`). Tell, don't ask. If you're navigating internals, the boundary is in the wrong place.
+- **Pesticide Paradox** — the same tests stop finding bugs over time. When fixing a bug, add a *new kind* of test (boundary, concurrency, malformed input) — not just a regression for that one case.
+- **Kernighan's Law** — debugging is twice as hard as writing code. If you write at the limit of your cleverness, you have nothing left for debugging. Default to boring.
+- **Tesler's Conservation of Complexity** — complexity moves but doesn't disappear. When "simplifying" code, ask *where the complexity went*. Usually it got pushed to the caller, the schema, or the docs. Move it deliberately, not accidentally.
+- **Gall's Law** — complex working systems always evolve from simpler working systems. Don't build the final architecture upfront. Get a thin slice end-to-end first.
+- **Pareto (80/20)** — 20% of causes drive 80% of problems. When stuck, locate the 20% before working on the rest.
+
+**Override note:** Boy Scout Rule ("leave code better than you found it") is *deliberately overridden* here — the *Surgical Changes* rule above wins. Don't auto-improve adjacent code.
