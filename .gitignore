@@ -6,3 +6,8 @@ __pycache__/
 **/__pycache__/
 *.pyc
 .claude/settings.local.json
+
+# Per-session work output (handoffs, plans, research) — personal context
+.handoffs/
+.plans/
+.research/
