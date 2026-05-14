@@ -18,6 +18,7 @@ Keep it tight — it's always in context.
 | `plugins/` | Claude Code plugin marketplace structure |
 | `agents/` | Agent definition files |
 | `tools/` | Install script tool registry |
+| `scripts/` | Standalone shell helpers (e.g., `jira-daily-setup.sh` for launchd) |
 
 ## Setup & plugin install
 
@@ -99,6 +100,9 @@ Type legend: **(cmd)** slash command · **(skill)** auto-firing skill · **(agen
 - `/claude-usage-collect` (cmd, A) — "collect my usage", "내 사용량 추출"
 - `/claude-usage-analyze` (cmd, A) — "analyze my usage", "내 사용 분석", "ROI 리포트"
 - `/claude-usage-report` (cmd, A) — "team usage report", "팀 사용 리포트"
+
+### Jira
+- `/jira-daily` (cmd, A) — "오늘 할당된 이슈", "today's jira", "내 티켓 봐줘", "jira 일일 분석"
 
 ### Setup
 - `setup-matt-pocock-skills` (skill, S — manual-only) — "set up engineering skills", "이 프로젝트 셋업" *(can't auto-fire — must suggest)*

@@ -19,7 +19,7 @@ cd ~/agcoco
 
 ## What's Included
 
-### Commands (20개)
+### Commands (21개)
 
 | Category | Commands |
 |----------|----------|
@@ -29,6 +29,7 @@ cd ~/agcoco
 | **Test** | `/workcheck`, `/affected-endpoints`, `/smoke-test`, `/branch-diff`, `/test-affected` |
 | **Commit & PR** | `/workfinish`, `/commit-mailplug`, `/commit-suggest`, `/pr-description` |
 | **Claude Usage** | `/claude-usage-collect`, `/claude-usage-analyze`, `/claude-usage-report` |
+| **Jira Automation** | `/jira-daily` (+ optional `scripts/jira-daily-setup.sh` for launchd cron) |
 
 ### Agents (12개)
 

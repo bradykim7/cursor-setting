@@ -59,6 +59,18 @@
 
 **플로우**: 팀원들이 `collect` 실행 → zip 수합 → 팀장이 `report`로 통합 분석. 개인은 `analyze`로 스스로 점검.
 
+### Jira 자동화 커맨드
+
+| 커맨드 | 용도 | 입력 예시 |
+|--------|------|-----------|
+| `/jira-daily` | 오늘 새로 할당된 Jira 이슈 자동 분석 + macOS 알림 + 계획서 초안 생성 | `/jira-daily` 또는 `/jira-daily WM-XXXXX` |
+
+**플로우**: 수동 실행이 기본. launchd 백그라운드 스케줄을 원하면 `scripts/jira-daily-setup.sh` 한 번 실행 → 평일 정해진 시간에 자동 발화 → macOS 알림 → 클릭 시 `.plans/` 폴더 또는 해당 `.md` 파일 오픈.
+
+- 사전 준비: `brew install terminal-notifier` + Jira MCP 설정
+- 계획서 저장: `$JIRA_DAILY_PLANS_DIR` env (기본 `$PWD/.plans/`)
+- 자동 스케줄 설치: `bash ~/personal/Agcoco/scripts/jira-daily-setup.sh` (대화형, 시간/디렉토리 선택)
+
 ---
 
 ## 빠른 사용법 (메타 커맨드)
