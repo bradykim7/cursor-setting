@@ -19,83 +19,17 @@ cd ~/agcoco
 ./install.sh
 ```
 
-## What's Included
+## Layer 01 — Input
 
-### Commands (21)
+![One config, many CLIs](./docs/images/agcoco-01-input.png)
 
-| Category | Commands |
-|----------|----------|
-| **Plan Lifecycle** | `/create-plan`, `/implement-plan`, `/iterate-plan`, `/validate-plan` |
-| **Research & Debug** | `/research`, `/debug` |
-| **Session** | `/handoff`, `/resume-handoff` |
-| **Test** | `/workcheck`, `/affected-endpoints`, `/smoke-test`, `/branch-diff`, `/test-affected` |
-| **Commit & PR** | `/workfinish`, `/commit-mailplug`, `/commit-suggest`, `/pr-description` |
-| **Claude Usage** | `/claude-usage-collect`, `/claude-usage-analyze`, `/claude-usage-report` |
-| **Jira Automation** | `/jira-daily` (+ optional `scripts/jira-daily-setup.sh` for launchd cron) |
+## Layer 02 — Router
 
-### Agents (12)
+![Three ways to fire the loop](./docs/images/agcoco-02-router.png)
 
-Commands trigger these automatically — you don't call them directly.
+## Layer 03 — Integration
 
-| Agent | Role |
-|-------|------|
-| `codebase-analyzer` | Code implementation analysis |
-| `codebase-locator` | File/component location (Super Grep) |
-| `codebase-pattern-finder` | Find similar patterns + code examples |
-| `docs-locator` | Search past plans/research/handoffs |
-| `docs-analyzer` | Extract insights from past documents |
-| `web-search-researcher` | Web search for up-to-date info |
-| `architecture-review` | Architecture risk analysis |
-| `endpoint-analysis` | API endpoint behavior analysis |
-| `pr-review-assistant` | PR risk-focused review |
-| `consistency-check` | Data snapshot comparison |
-| `document-summarizer` | Document summarization |
-| `pr-description-generator` | PR description generation |
-
-### Skills (22)
-
-Ported from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). Skills auto-fire when your phrasing matches their `description` field — no slash command needed.
-
-| Category | Skill | Triggers when you say… |
-|----------|-------|------------------------|
-| **engineering** | `setup-matt-pocock-skills` | "set up the engineering skills for this repo" — run first in any new project |
-| | `grill-with-docs` | "stress-test this plan against our domain model" |
-| | `to-prd` | "turn this conversation into a PRD" |
-| | `to-issues` | "break this plan into issues" |
-| | `triage` | "triage these incoming issues" |
-| | `tdd` | "let's TDD this", "red-green-refactor" |
-| | `diagnose` | "diagnose this bug", "this is broken/throwing/failing" |
-| | `improve-codebase-architecture` | "find refactoring opportunities", "improve architecture" |
-| | `prototype` | "let me prototype this", "try a few UI variations" |
-| | `zoom-out` | "zoom out", "give me the bigger picture" |
-| **productivity** | `grill-me` | "grill me on this plan", "interview me" |
-| | `caveman` | (terse output mode) |
-| | `write-a-skill` | "create a new skill" |
-| **misc** | `git-guardrails-claude-code` | "block dangerous git commands", "add git safety hooks" |
-| | `setup-pre-commit` | "set up pre-commit hooks", "add Husky + lint-staged" |
-| | `migrate-to-shoehorn` | "replace `as` with shoehorn in tests" |
-| | `scaffold-exercises` | "scaffold an exercise structure" |
-| **personal** | `edit-article` | "edit/revise this article" |
-| | `obsidian-vault` | "find/create a note in Obsidian" |
-| **in-progress** | `writing-fragments` | "ideate", "fragments", "raw material" |
-| | `writing-shape` | "shape these notes into an article" |
-| | `writing-beats` | "assemble this as a narrative" |
-
-**Commands vs Agents vs Skills:**
-- **Commands** (`/foo`) — you invoke explicitly. Full workflows.
-- **Agents** — Claude spawns them automatically inside commands. Specialized single tasks.
-- **Skills** — auto-fire from your phrasing. Trigger via `description` matching.
-
-## Multi-Tool Support (`tools/` registry)
-
-Tool-agnostic — `install.sh` runs a generic loop over `tools/*.sh`, auto-detects whatever CLIs are installed, and creates the declared symlinks. `AGENTS.md` is the **canonical** agent context (openclaw pattern); each tool's expected memory filename is a symlink to it.
-
-**Shipped (verified):**
-
-| File | Tool | Detection | Symlinks created |
-|---|---|---|---|
-| `tools/claude.sh` | Claude Code | `command -v claude` | `~/.claude/CLAUDE.md` → `AGENTS.md`, `commands`, `agents`, `skills`, `settings.json` |
-| `tools/codex.sh` | Codex CLI | `command -v codex` | `~/.codex/AGENTS.md` → `AGENTS.md`, `skills` (same SKILL.md format) |
+![One source, symlinked everywhere](./docs/images/agcoco-03-integration.png)
 
 **Add any other tool** — Gemini, Cursor agent, Aider, Continue, etc:
 
@@ -107,7 +41,41 @@ $EDITOR tools/<your-tool>.sh    # fill in 4 vars: TOOL_NAME, TOOL_CMD, TOOL_DIR,
 
 `_template.sh` has commented-out example definitions for Gemini, Cursor, Aider, and Continue. See `tools/README.md` for the convention details. Tools whose CLI isn't installed are listed under the "skipped tools" section and skipped silently.
 
-## Project Init
+## Layer 04 — Core
+
+![The agent loop](./docs/images/agcoco-04-core.png)
+
+## Layer 05 — Commands
+
+![Twenty-one workflows behind a slash](./docs/images/agcoco-05-commands.png)
+
+## Layer 06 — Agents
+
+![Twelve specialists on Sonnet](./docs/images/agcoco-06-agents.png)
+
+## Layer 07 — Skills
+
+![Twenty-two habits, autoloaded](./docs/images/agcoco-07-skills.png)
+
+Ported from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). Skills auto-fire when your phrasing matches their `description` field — no slash command needed.
+
+## Layer 08 — Plugins
+
+![Six marketplace bundles](./docs/images/agcoco-08-plugins.png)
+
+Install bundles via the plugin marketplace:
+
+```bash
+/plugin marketplace add mskim/Agcoco
+/plugin install engineering-skills@agcoco
+/plugin install workflow@agcoco
+```
+
+## Layer 09 — Memory
+
+![Markdown on disk is the memory](./docs/images/agcoco-09-memory.png)
+
+### Project Init
 
 ```bash
 ./install.sh init /path/to/project
@@ -115,7 +83,7 @@ $EDITOR tools/<your-tool>.sh    # fill in 4 vars: TOOL_NAME, TOOL_CMD, TOOL_DIR,
 
 Creates `CLAUDE.md` + `.handoffs/` + `.plans/` + `.research/` in the target project.
 
-## Obsidian Vault Init
+### Obsidian Vault Init
 
 Bootstraps an Obsidian vault for accumulating company knowledge + development knowledge.
 
@@ -130,6 +98,14 @@ Creates a vault with:
 - Auto-configured Obsidian core plugins
 
 → Follow the [Obsidian Onboarding Guide](docs/obsidian-onboarding.md) (10 minutes)
+
+## Layer 10 — Output
+
+![What lands in your repo](./docs/images/agcoco-10-output.png)
+
+## Layer 11 — Hooks
+
+![Four guardrails the agent can't dodge](./docs/images/agcoco-11-hooks.png)
 
 ## Docs
 

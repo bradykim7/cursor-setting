@@ -19,87 +19,17 @@ cd ~/agcoco
 ./install.sh
 ```
 
-## 포함 내용
+## Layer 01 — Input
 
-### Commands (21개)
+![One config, many CLIs](./docs/images/agcoco-01-input.png)
 
-| 카테고리 | 커맨드 |
-|----------|--------|
-| **계획 라이프사이클** | `/create-plan`, `/implement-plan`, `/iterate-plan`, `/validate-plan` |
-| **리서치 & 디버그** | `/research`, `/debug` |
-| **세션** | `/handoff`, `/resume-handoff` |
-| **테스트** | `/workcheck`, `/affected-endpoints`, `/smoke-test`, `/branch-diff`, `/test-affected` |
-| **커밋 & PR** | `/workfinish`, `/commit-mailplug`, `/commit-suggest`, `/pr-description` |
-| **Claude 사용량** | `/claude-usage-collect`, `/claude-usage-analyze`, `/claude-usage-report` |
-| **Jira 자동화** | `/jira-daily` (+ 선택적 `scripts/jira-daily-setup.sh` launchd cron) |
+## Layer 02 — Router
 
-→ 전체 목록 [docs/commands.kr.md](docs/commands.kr.md)
+![Three ways to fire the loop](./docs/images/agcoco-02-router.png)
 
-### Agents (12개)
+## Layer 03 — Integration
 
-커맨드가 자동으로 호출 — 직접 부르지 않습니다.
-
-| 에이전트 | 역할 |
-|----------|------|
-| `codebase-analyzer` | 코드 구현 분석 |
-| `codebase-locator` | 파일/컴포넌트 위치 찾기 (Super Grep) |
-| `codebase-pattern-finder` | 유사 패턴 + 코드 예제 |
-| `docs-locator` | 과거 plans/research/handoffs 검색 |
-| `docs-analyzer` | 과거 문서에서 인사이트 추출 |
-| `web-search-researcher` | 최신 정보 웹 검색 |
-| `architecture-review` | 아키텍처 리스크 분석 |
-| `endpoint-analysis` | API 엔드포인트 동작 분석 |
-| `pr-review-assistant` | PR 리스크 중심 리뷰 |
-| `consistency-check` | 데이터 스냅샷 비교 |
-| `document-summarizer` | 문서 요약 |
-| `pr-description-generator` | PR 설명 생성 |
-
-→ 전체 목록 [docs/agents.kr.md](docs/agents.kr.md)
-
-### Skills (22개)
-
-[mattpocock/skills](https://github.com/mattpocock/skills) (MIT) 에서 포팅. 사용자 문구가 스킬의 `description` 필드와 매치되면 자동 발화 — 슬래시 커맨드 불필요.
-
-| 카테고리 | 스킬 | 발화 문구 |
-|----------|------|-----------|
-| **engineering** | `setup-matt-pocock-skills` | "set up the engineering skills for this repo" — 새 프로젝트에서 먼저 실행 |
-| | `grill-with-docs` | "stress-test this plan against our domain model" |
-| | `to-prd` | "turn this conversation into a PRD" |
-| | `to-issues` | "break this plan into issues" |
-| | `triage` | "triage these incoming issues" |
-| | `tdd` | "let's TDD this", "red-green-refactor" |
-| | `diagnose` | "diagnose this bug", "this is broken/throwing/failing" |
-| | `improve-codebase-architecture` | "find refactoring opportunities", "improve architecture" |
-| | `prototype` | "let me prototype this", "try a few UI variations" |
-| | `zoom-out` | "zoom out", "give me the bigger picture" |
-| **productivity** | `grill-me` | "grill me on this plan", "interview me" |
-| | `caveman` | (간결 출력 모드) |
-| | `write-a-skill` | "create a new skill" |
-| **misc** | `git-guardrails-claude-code` | "block dangerous git commands", "add git safety hooks" |
-| | `setup-pre-commit` | "set up pre-commit hooks", "add Husky + lint-staged" |
-| | `migrate-to-shoehorn` | "replace `as` with shoehorn in tests" |
-| | `scaffold-exercises` | "scaffold an exercise structure" |
-| **personal** | `edit-article` | "edit/revise this article" |
-| | `obsidian-vault` | "find/create a note in Obsidian" |
-| **in-progress** | `writing-fragments` | "ideate", "fragments", "raw material" |
-| | `writing-shape` | "shape these notes into an article" |
-| | `writing-beats` | "assemble this as a narrative" |
-
-**Commands vs Agents vs Skills:**
-- **Commands** (`/foo`) — 사용자가 명시 호출. 전체 워크플로우.
-- **Agents** — Claude 가 커맨드 안에서 자동 spawn. 전문화된 단일 작업.
-- **Skills** — 사용자 문구로 자동 발화. `description` 매칭으로 트리거.
-
-## 멀티 툴 지원 (`tools/` 레지스트리)
-
-도구 종속이 없는 — `install.sh` 가 `tools/*.sh` 를 일반 루프로 순회하며 설치된 CLI 자동 감지 후 선언된 심링크 생성. `AGENTS.md` 가 **표준 (canonical)** 에이전트 컨텍스트 (openclaw 패턴); 각 도구의 메모리 파일명은 이 파일을 가리키는 심링크.
-
-**기본 제공 (검증됨):**
-
-| 파일 | 도구 | 감지 | 생성 심링크 |
-|------|------|------|-------------|
-| `tools/claude.sh` | Claude Code | `command -v claude` | `~/.claude/CLAUDE.md` → `AGENTS.md`, `commands`, `agents`, `skills`, `settings.json` |
-| `tools/codex.sh` | Codex CLI | `command -v codex` | `~/.codex/AGENTS.md` → `AGENTS.md`, `skills` (동일 SKILL.md 포맷) |
+![One source, symlinked everywhere](./docs/images/agcoco-03-integration.png)
 
 **다른 도구 추가** — Gemini, Cursor agent, Aider, Continue 등:
 
@@ -111,7 +41,41 @@ $EDITOR tools/<your-tool>.sh    # 4개 변수 입력: TOOL_NAME, TOOL_CMD, TOOL_
 
 `_template.sh` 에 Gemini, Cursor, Aider, Continue 예제 정의가 주석 처리되어 있음. 컨벤션 상세는 `tools/README.md` 참조. CLI 가 설치되지 않은 도구는 "건너뛴 툴" 에 표시되고 조용히 스킵.
 
-## 프로젝트 초기화
+## Layer 04 — Core
+
+![The agent loop](./docs/images/agcoco-04-core.png)
+
+## Layer 05 — Commands
+
+![Twenty-one workflows behind a slash](./docs/images/agcoco-05-commands.png)
+
+## Layer 06 — Agents
+
+![Twelve specialists on Sonnet](./docs/images/agcoco-06-agents.png)
+
+## Layer 07 — Skills
+
+![Twenty-two habits, autoloaded](./docs/images/agcoco-07-skills.png)
+
+[mattpocock/skills](https://github.com/mattpocock/skills) (MIT) 에서 포팅. 사용자 문구가 스킬의 `description` 필드와 매치되면 자동 발화 — 슬래시 커맨드 불필요.
+
+## Layer 08 — Plugins
+
+![Six marketplace bundles](./docs/images/agcoco-08-plugins.png)
+
+플러그인 마켓플레이스로 묶음 설치:
+
+```bash
+/plugin marketplace add mskim/Agcoco
+/plugin install engineering-skills@agcoco
+/plugin install workflow@agcoco
+```
+
+## Layer 09 — Memory
+
+![Markdown on disk is the memory](./docs/images/agcoco-09-memory.png)
+
+### 프로젝트 초기화
 
 ```bash
 ./install.sh init /path/to/project
@@ -119,7 +83,7 @@ $EDITOR tools/<your-tool>.sh    # 4개 변수 입력: TOOL_NAME, TOOL_CMD, TOOL_
 
 대상 프로젝트에 `CLAUDE.md` + `.handoffs/` + `.plans/` + `.research/` 생성.
 
-## Obsidian 볼트 초기화
+### Obsidian 볼트 초기화
 
 회사 지식 + 개발 지식 축적용 Obsidian 볼트를 부트스트랩.
 
@@ -134,6 +98,14 @@ $EDITOR tools/<your-tool>.sh    # 4개 변수 입력: TOOL_NAME, TOOL_CMD, TOOL_
 - Obsidian 코어 플러그인 자동 설정
 
 → [Obsidian Onboarding Guide](docs/obsidian-onboarding.md) 따라하기 (10분)
+
+## Layer 10 — Output
+
+![What lands in your repo](./docs/images/agcoco-10-output.png)
+
+## Layer 11 — Hooks
+
+![Four guardrails the agent can't dodge](./docs/images/agcoco-11-hooks.png)
 
 ## 문서
 
